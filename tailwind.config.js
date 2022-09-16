@@ -22,7 +22,8 @@ module.exports = {
     extend: {
       colors : {
         "canvas-color": "#f3f2ef",
-        "primary-color": "#73c2fb",
+        "primary-color": "#0000ff",
+        "secondary-color": "#3f5375",
       },
       flex: {
         "25%": "0 0 25%",
