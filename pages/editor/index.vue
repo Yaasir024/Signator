@@ -1,32 +1,59 @@
 <script setup>
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
+const { uid } = useGenerateUid();
+
+const data = reactive({
+  image: {
+    imgSrc: "",
+    url: "",
+  },
+  name: "",
+  position: "",
+  company: "",
+  contactInfo: [],
+});
+
+// Add New Contact Item
+const addNewContactItem = () => {
+  data.contactInfo.push({
+    id: uid(6),
+    field: "",
+    value: "",
+  });
+  console.log(data.image.imgSrc);
+};
+// Delete Contact Item
+const deleteContanctItem = (id) => {
+  data.contactInfo = data.contactInfo.filter((item) => item.id != id);
+};
 
 const currentEditorNav = ref("general");
 const setNavValue = (value) => {
   currentEditorNav.value = value;
 };
 
-const preview = ref();
-const image = ref();
-
+// Add image
 const previewImage = (event) => {
   let input = event.target;
+  let image = input.files[0];
   if (input.files) {
     let reader = new FileReader();
     reader.onload = (e) => {
-      preview.value = e.target.result;
+      data.image.imgSrc = e.target.result;
     };
-    image.value = input.files[0];
     reader.readAsDataURL(input.files[0]);
   }
-  console.log(preview.value, image.value);
+};
+// Remove Image
+const clearImage = () => {
+  data.image.imgSrc = "";
 };
 </script>
 
 <template>
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
-    <main class="mt-8">
+    <main class="pt-12 pb-24">
       <section class="max-w-[1280px] mx-auto px-6">
         <div class="editor flex">
           <div class="flex-50% min-h[500px]">left</div>
@@ -73,13 +100,13 @@ const previewImage = (event) => {
               <div class="main px-10 pt-10 pb-12">
                 <div class="general">
                   <div class="content max-w-[400px] mx-auto">
-                    <div class="wrapper image-section flex pb-3">
+                    <div class="wrapper image-section flex items-end pb-3">
                       <div
-                        class="image-preview w-[40%] rounded-2xl overflow-hidden text-secondary-color"
+                        class="image-preview w-[40%] text-secondary-color relative"
                       >
                         <div
-                          class="relative flex flex-col items-center py-10 border overflow-hidden"
-                          v-if="!image"
+                          class="relative flex flex-col items-center py-10 border border-dashed overflow-hidden"
+                          v-if="!data.image.imgSrc"
                         >
                           <div class="icon block">
                             <svg
@@ -101,13 +128,41 @@ const previewImage = (event) => {
                             accept="image/*"
                             @change="previewImage"
                             class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-                            id="my-file"
                           />
                         </div>
                         <img
-                          :src="preview"
+                          :src="data.image.imgSrc"
                           class="w-full h-full"
-                          v-if="image"
+                          v-if="data.image.imgSrc"
+                        />
+                        <div
+                          class="flex items-center justify-center absolute right-[-4px] top-[-4px] bg-red-600 text-white p-1 rounded-full cursor-pointer"
+                          v-if="data.image.imgSrc"
+                          @click="clearImage()"
+                        >
+                          <svg
+                            height="16"
+                            width="16"
+                            fill="currentColor"
+                            clip-rule="evenodd"
+                            fill-rule="evenodd"
+                            stroke-linejoin="round"
+                            stroke-miterlimit="2"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div class="w-[60%] pl-2 mb-4">
+                        <input
+                          type="text"
+                          placeholder="Add Link"
+                          class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                          :class="defaultTransition"
                         />
                       </div>
                     </div>
@@ -120,6 +175,7 @@ const previewImage = (event) => {
                           type="text"
                           class="text-sm w-full max-w-[60%] bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
                           :class="defaultTransition"
+                          v-model="data.name"
                         />
                       </div>
                       <div
@@ -130,6 +186,7 @@ const previewImage = (event) => {
                           type="text"
                           class="text-sm w-full max-w-[60%] bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
                           :class="defaultTransition"
+                          v-model="data.position"
                         />
                       </div>
                       <div
@@ -140,17 +197,70 @@ const previewImage = (event) => {
                           type="text"
                           class="text-sm w-full max-w-[60%] bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
                           :class="defaultTransition"
+                          v-model="data.company"
                         />
                       </div>
                     </div>
+
+                    <!-- Contact Info Section -->
                     <div class="wrapper contact border-t">
                       <div
                         class="text-primary-color text-lg font-semibold my-4"
                       >
                         Contact Info
                       </div>
-                      <div class="flex justify-end">
-                        <div class="flex items-center text-primary-color cursor-pointer">
+                      <div class="my-3">
+                        <div
+                          class="field flex space-between mt-4 relative"
+                          v-for="item in data.contactInfo"
+                          :key="item.id"
+                        >
+                          <div class="w-[50%] pr-1">
+                            <input
+                              type="text"
+                              placeholder="Field"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                              :class="defaultTransition"
+                              v-model="item.field"
+                            />
+                          </div>
+                          <div class="w-[50%] pl-1">
+                            <input
+                              type="text"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                              :class="defaultTransition"
+                              v-model="item.value"
+                            />
+                          </div>
+                          <div
+                            class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                            @click="deleteContanctItem(item.id)"
+                          >
+                            <svg
+                              height="16"
+                              width="16"
+                              fill="currentColor"
+                              clip-rule="evenodd"
+                              fill-rule="evenodd"
+                              stroke-linejoin="round"
+                              stroke-miterlimit="2"
+                              viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Add Button -->
+                      <div class="flex justify-end mt-6">
+                        <div
+                          class="flex items-center text-primary-color cursor-pointer"
+                          @click="addNewContactItem()"
+                        >
                           <span class="mr-2">Add Field</span>
                           <svg
                             width="24"
@@ -169,6 +279,11 @@ const previewImage = (event) => {
                     </div>
                   </div>
                 </div>
+                <div class="social">
+                  <div class="facebook social-icon text-white">
+                    <img src="/icons/social/facebook.svg" class="h-[16px] w-[16px] fill-white" alt="">
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -177,3 +292,12 @@ const previewImage = (event) => {
     </main>
   </div>
 </template>
+
+
+<style scoped>
+.social-icon img {
+  height: 16px;
+  width: 16px;
+  fill: red;
+}
+</style>
