@@ -1,6 +1,7 @@
 <script setup>
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
 const { uid } = useGenerateUid();
+const { socialIcons } = useSocialIcons();
 
 const data = reactive({
   image: {
@@ -11,6 +12,24 @@ const data = reactive({
   position: "",
   company: "",
   contactInfo: [],
+  socialInfo: [],
+  addons: {
+    id: [],
+  },
+});
+
+const socialSearchQuery = ref("");
+
+const filteredSocialData = computed(() => {
+  const query = ref(socialSearchQuery.value.toLowerCase());
+  if (socialSearchQuery.value === "") {
+    return socialIcons;
+  }
+  return socialIcons.filter((item) => {
+    return Object.values(item).some((word) =>
+      String(word).toLowerCase().includes(query.value)
+    );
+  });
 });
 
 // Add New Contact Item
@@ -20,11 +39,32 @@ const addNewContactItem = () => {
     field: "",
     value: "",
   });
-  console.log(data.image.imgSrc);
 };
 // Delete Contact Item
 const deleteContanctItem = (id) => {
   data.contactInfo = data.contactInfo.filter((item) => item.id != id);
+};
+
+// Add New Social Item
+const addNewSocialItem = (social) => {
+  data.socialInfo.push({
+    id: uid(6),
+    name: social,
+    url: "",
+  });
+  socialSearchQuery.value = "";
+  console.log(data.socialInfo);
+};
+
+// Delete Social Item
+const deleteSocialItem = (id) => {
+  data.socialInfo = data.socialInfo.filter((item) => item.id != id);
+};
+
+const addAddons = (addon) => {
+  data.addons[addon] = [];
+
+  console.log(data.addons);
 };
 
 const currentEditorNav = ref("general");
@@ -98,7 +138,7 @@ const clearImage = () => {
                 </li>
               </ul>
               <div class="main px-10 pt-10 pb-12">
-                <div class="general">
+                <div class="general" v-if="currentEditorNav === 'general'">
                   <div class="content max-w-[400px] mx-auto">
                     <div class="wrapper image-section flex items-end pb-3">
                       <div
@@ -279,9 +319,129 @@ const clearImage = () => {
                     </div>
                   </div>
                 </div>
-                <div class="social">
-                  <div class="facebook social-icon text-white">
-                    <img src="/icons/social/facebook.svg" class="h-[16px] w-[16px] fill-white" alt="">
+                <div class="social" v-if="currentEditorNav === 'social'">
+                  <div class="my-3 mb-10">
+                    <div
+                      class="field flex items-center justify-between mt-4 relative"
+                      v-for="social in data.socialInfo"
+                      :key="social.id"
+                    >
+                      <SocialIcon :icon="social.name" />
+                      <div class="w-[85%] pl-1">
+                        <input
+                          type="text"
+                          class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                          :class="defaultTransition"
+                          v-model="social.url"
+                        />
+                      </div>
+                      <div
+                        class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                        @click="deleteSocialItem(social.id)"
+                      >
+                        <svg
+                          height="16"
+                          width="16"
+                          fill="currentColor"
+                          clip-rule="evenodd"
+                          fill-rule="evenodd"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="search">
+                    <input
+                      type="text"
+                      placeholder="Search"
+                      class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                      :class="defaultTransition"
+                      v-model="socialSearchQuery"
+                    />
+                  </div>
+                  <div class="social-icons flex flex-wrap my-8">
+                    <div
+                      class="m-1"
+                      v-for="icon in filteredSocialData"
+                      :key="icon.id"
+                      @click="addNewSocialItem(icon.name)"
+                    >
+                      <SocialIcon :icon="icon.name" />
+                    </div>
+                  </div>
+                </div>
+                <div class="addons" v-if="currentEditorNav === 'addons'">
+                  <div class="">
+                    <div class="mb-3" v-if="data.addons.social">
+                      <div
+                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        >
+                          <path
+                            d="M16.272 5.451c-.176-.45-.272-.939-.272-1.451 0-2.208 1.792-4 4-4s4 1.792 4 4-1.792 4-4 4c-1.339 0-2.525-.659-3.251-1.67l-7.131 3.751c.246.591.382 1.239.382 1.919 0 .681-.136 1.33-.384 1.922l7.131 3.751c.726-1.013 1.913-1.673 3.253-1.673 2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4c0-.51.096-.999.27-1.447l-7.129-3.751c-.9 1.326-2.419 2.198-4.141 2.198-2.76 0-5-2.24-5-5s2.24-5 5-5c1.723 0 3.243.873 4.143 2.201l7.129-3.75zm3.728 11.549c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm-15-9c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm15-7c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z"
+                          />
+                        </svg>
+                        <span class="ml-3">Social</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="available-addons border-t">
+                    <div class="text-primary-color text-lg font-semibold my-4">
+                      Available Addons
+                    </div>
+                    <div class="mb-2">
+                      <div class="mb-3">
+                        <div
+                          class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                          @click="addAddons('social')"
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                          >
+                            <path
+                              d="M16.272 5.451c-.176-.45-.272-.939-.272-1.451 0-2.208 1.792-4 4-4s4 1.792 4 4-1.792 4-4 4c-1.339 0-2.525-.659-3.251-1.67l-7.131 3.751c.246.591.382 1.239.382 1.919 0 .681-.136 1.33-.384 1.922l7.131 3.751c.726-1.013 1.913-1.673 3.253-1.673 2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4c0-.51.096-.999.27-1.447l-7.129-3.751c-.9 1.326-2.419 2.198-4.141 2.198-2.76 0-5-2.24-5-5s2.24-5 5-5c1.723 0 3.243.873 4.143 2.201l7.129-3.75zm3.728 11.549c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm-15-9c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm15-7c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z"
+                            />
+                          </svg>
+                          <span class="ml-3">Social</span>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <div
+                          class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                          @click="addAddons('videoMeeting')"
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                          >
+                            <path
+                              d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
+                            />
+                          </svg>
+                          <span class="ml-3">Video Meeting</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -292,7 +452,6 @@ const clearImage = () => {
     </main>
   </div>
 </template>
-
 
 <style scoped>
 .social-icon img {

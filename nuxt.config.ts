@@ -7,6 +7,10 @@ export default defineNuxtConfig({
         rel: "stylesheet",
         href: "/css/base.css",
       },
+      {
+        rel: "stylesheet",
+        href: "/css/social.css",
+      },
     ],
   },
 });
