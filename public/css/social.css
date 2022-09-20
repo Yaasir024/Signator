@@ -21,23 +21,68 @@
   );
 }
 .whatsapp {
-    background: #25d366;
+  background: #25d366;
 }
 .line {
-    background: #00c300;
+  background: #00c300;
 }
-.github{
-    background: #444;
+.github {
+  background: #444;
 }
 .stackoverflow {
-    background: #f48024;
+  background: #f48024;
 }
 .dribble {
-    background: #ea4c89;
+  background: #ea4c89;
 }
 .behance {
-    background: #0057ff;
+  background: #0057ff;
 }
 .pinterest {
   background: #bd081c;
+}
+.discord {
+  background: #7289da;
+}
+.snapchat {
+  background: #fffc00;
+}
+.tiktok {
+  background: #000;
+}
+.youtube {
+  background: #ff0000;
+}
+.vimeo {
+  background: #1ab7ea;
+}
+.google {
+  background: #dd4b39;
+}
+.amazon {
+  background: #2a2c35;
+}
+.apple {
+  background: #6c6d6f;
+}
+.spotify {
+  background: #1db954;
+}
+.soundcloud {
+  background: #f80;
+}
+.airbnb {
+  background: #fd5c63;
+}
+.telegram {
+  background: #08c;
+}
+.tumblr {
+  background: #1c2d3f;
+}
+.reddit {
+  background: #ff4500;
+}
+.quora {
+  background: #a82400;
 }

@@ -1,7 +1,13 @@
 <script setup>
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
 const { uid } = useGenerateUid();
-const { socialIcons } = useSocialIcons();
+const { socialIcons, addonsSocial } = useEditorIcons();
+
+// Change Editor Route
+const currentEditorNav = ref("addons");
+const setNavValue = (value) => {
+  currentEditorNav.value = value;
+};
 
 const data = reactive({
   image: {
@@ -66,10 +72,22 @@ const addAddons = (addon) => {
 
   console.log(data.addons);
 };
+const deleteAddons = (addon) => {
+  delete data.addons[addon];
 
-const currentEditorNav = ref("general");
-const setNavValue = (value) => {
-  currentEditorNav.value = value;
+  console.log(data.addons);
+};
+
+const addSocialAddon = (social) => {
+  data.addons.social.push({
+    id: uid(6),
+    name: social,
+    url: "",
+  });
+  console.log(data.addons.social);
+};
+const deleteSocialAddon = (id) => {
+  data.addons.social = data.addons.social.filter((item) => item.id != id);
 };
 
 // Add image
@@ -379,9 +397,12 @@ const clearImage = () => {
                 </div>
                 <div class="addons" v-if="currentEditorNav === 'addons'">
                   <div class="">
-                    <div class="mb-3" v-if="data.addons.social">
+                    <div
+                      class="mb-3 rounded-3xl shadow-2xl relative"
+                      v-if="data.addons.social"
+                    >
                       <div
-                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                        class="accordion flex items-center py-4 px-5 border-b"
                       >
                         <svg
                           width="24"
@@ -396,6 +417,109 @@ const clearImage = () => {
                         </svg>
                         <span class="ml-3">Social</span>
                       </div>
+                      <div class="content py-7 px-8">
+                        <div class="">
+                          <div
+                            class="field flex items-center justify-between mt-4 relative"
+                            v-for="social in data.addons.social"
+                            :key="social.id"
+                          >
+                            <div class="max-w-[120px]">
+                              <img
+                                :src="
+                                  '/icons/addons/' + social.name + '_1' + '.png'
+                                "
+                                alt=""
+                                class="w-full"
+                              />
+                            </div>
+                            <div class="w-[55%] pl-1">
+                              <input
+                                type="text"
+                                class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                                :class="defaultTransition"
+                                v-model="social.url"
+                              />
+                            </div>
+                            <div
+                              class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                              @click="deleteSocialAddon(social.id)"
+                            >
+                              <svg
+                                height="16"
+                                width="16"
+                                fill="currentColor"
+                                clip-rule="evenodd"
+                                fill-rule="evenodd"
+                                stroke-linejoin="round"
+                                stroke-miterlimit="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="icons my-6">
+                          <div class="flex flex-wrap">
+                            <div
+                              class="max-w-[33.3333%] p-1 cursor-pointer"
+                              v-for="icon in addonsSocial"
+                              :key="icon.id"
+                              @click="addSocialAddon(icon.name)"
+                            >
+                              <img
+                                :src="
+                                  '/icons/addons/' + icon.name + '_1' + '.png'
+                                "
+                                class="w-full"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                        @click="deleteAddons('social')"
+                      >
+                        <svg
+                          height="16"
+                          width="16"
+                          fill="currentColor"
+                          clip-rule="evenodd"
+                          fill-rule="evenodd"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div class="mb-3" v-if="data.addons.videoMeeting">
+                      <div
+                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        >
+                          <path
+                            d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
+                          />
+                        </svg>
+                        <span class="ml-3">Video Meeting</span>
+                      </div>
                     </div>
                   </div>
                   <div class="available-addons border-t">
@@ -403,7 +527,7 @@ const clearImage = () => {
                       Available Addons
                     </div>
                     <div class="mb-2">
-                      <div class="mb-3">
+                      <div class="mb-3" v-if="!data.addons.social">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                           @click="addAddons('social')"
@@ -422,7 +546,7 @@ const clearImage = () => {
                           <span class="ml-3">Social</span>
                         </div>
                       </div>
-                      <div class="mb-3">
+                      <div class="mb-3" v-if="!data.addons.videoMeeting">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                           @click="addAddons('videoMeeting')"
