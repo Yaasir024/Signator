@@ -21,6 +21,18 @@ const data = reactive({
   socialInfo: [],
   addons: {
     id: [],
+    social: {
+      isAdded: false,
+      items: [],
+      style: {
+        height: 22,
+        paddingTop: 10,
+      }
+    },
+    videoMeeting: {
+      isAdded: false,
+      items: [],
+    },
   },
 });
 
@@ -68,18 +80,18 @@ const deleteSocialItem = (id) => {
 };
 
 const addAddons = (addon) => {
-  data.addons[addon] = [];
+  data.addons[addon].isAdded = true;
 
   console.log(data.addons);
 };
 const deleteAddons = (addon) => {
-  delete data.addons[addon];
+  data.addons[addon].isAdded = false;
 
   console.log(data.addons);
 };
 
 const addSocialAddon = (social) => {
-  data.addons.social.push({
+  data.addons.social.items.push({
     id: uid(6),
     name: social,
     url: "",
@@ -87,7 +99,7 @@ const addSocialAddon = (social) => {
   console.log(data.addons.social);
 };
 const deleteSocialAddon = (id) => {
-  data.addons.social = data.addons.social.filter((item) => item.id != id);
+  data.addons.social.items = data.addons.social.items.filter((item) => item.id != id);
 };
 
 // Add image
@@ -399,7 +411,7 @@ const clearImage = () => {
                   <div class="">
                     <div
                       class="mb-3 rounded-3xl shadow-2xl relative"
-                      v-if="data.addons.social"
+                      v-if="data.addons.social.isAdded"
                     >
                       <div
                         class="accordion flex items-center py-4 px-5 border-b"
@@ -421,7 +433,7 @@ const clearImage = () => {
                         <div class="">
                           <div
                             class="field flex items-center justify-between mt-4 relative"
-                            v-for="social in data.addons.social"
+                            v-for="social in data.addons.social.items"
                             :key="social.id"
                           >
                             <div class="max-w-[120px]">
@@ -481,6 +493,22 @@ const clearImage = () => {
                             </div>
                           </div>
                         </div>
+                        <div class="styles my-5">
+                          <div class="mb-2">
+                            <div class="flex items-center justify-between">
+                              <span>Height</span>
+                              <span>{{data.addons.social.style.height}}px</span>
+                            </div>
+                            <input type="range" class="win10-thumb" min="20" max="50" v-model="data.addons.social.style.height" />
+                          </div>
+                          <div class="">
+                            <div class="flex items-center justify-between">
+                              <span>Padding-Top</span>
+                              <span>{{data.addons.social.style.paddingTop}}px</span>
+                            </div>
+                            <input type="range" class="win10-thumb" min="5" max="20" v-model="data.addons.social.style.paddingTop" />
+                          </div>
+                        </div>
                       </div>
                       <div
                         class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
@@ -503,7 +531,7 @@ const clearImage = () => {
                         </svg>
                       </div>
                     </div>
-                    <div class="mb-3" v-if="data.addons.videoMeeting">
+                    <div class="mb-3" v-if="data.addons.videoMeeting.isAdded">
                       <div
                         class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                       >
@@ -527,7 +555,7 @@ const clearImage = () => {
                       Available Addons
                     </div>
                     <div class="mb-2">
-                      <div class="mb-3" v-if="!data.addons.social">
+                      <div class="mb-3" v-if="!data.addons.social.isAdded">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                           @click="addAddons('social')"
@@ -546,7 +574,10 @@ const clearImage = () => {
                           <span class="ml-3">Social</span>
                         </div>
                       </div>
-                      <div class="mb-3" v-if="!data.addons.videoMeeting">
+                      <div
+                        class="mb-3"
+                        v-if="!data.addons.videoMeeting.isAdded"
+                      >
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                           @click="addAddons('videoMeeting')"
@@ -583,4 +614,7 @@ const clearImage = () => {
   width: 16px;
   fill: red;
 }
+
+
+
 </style>
