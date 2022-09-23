@@ -1,7 +1,7 @@
 <script setup>
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
 const { uid } = useGenerateUid();
-const { socialIcons, addonsSocial } = useEditorIcons();
+const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 
 // Change Editor Route
 const currentEditorNav = ref("design");
@@ -101,8 +101,8 @@ const deleteAddons = (addon) => {
   console.log(data.addons);
 };
 const checkAddons = () => {
-  return data.addons.social.isAdded || data.addons.videoMeeting.isAdded
-}
+  return data.addons.social.isAdded || data.addons.videoMeeting.isAdded;
+};
 
 const addSocialAddon = (social) => {
   data.addons.social.items.push({
@@ -140,6 +140,7 @@ const clearImage = () => {
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
     <main class="pt-12 pb-24">
+      {{ getUrl("twitter") }}
       <section class="max-w-[1280px] mx-auto px-6">
         <div class="editor flex">
           <div class="flex-50% min-h[500px]">left</div>
@@ -293,7 +294,7 @@ const clearImage = () => {
 
                     <!-- Contact Info Section -->
                     <div class="wrapper contact">
-                      <EditorHeadings :title="'Layout'"/>
+                      <EditorHeadings :title="'Layout'" />
                       <div class="my-3">
                         <div
                           class="field flex space-between mt-4 relative"
@@ -375,6 +376,7 @@ const clearImage = () => {
                       <div class="w-[85%] pl-1">
                         <input
                           type="text"
+                          :placeholder="getUrl(social.name)"
                           class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
                           :class="defaultTransition"
                           v-model="social.url"
@@ -423,8 +425,8 @@ const clearImage = () => {
                   </div>
                 </div>
                 <div class="addons" v-if="currentEditorNav === 'addons'">
-                  <div class=" border-b pb-7  mb-10" v-if="checkAddons()">
-                    <EditorHeadings :title="'Added Addons'"/>
+                  <div class="border-b pb-7 mb-10" v-if="checkAddons()">
+                    <EditorHeadings :title="'Added Addons'" />
                     <div
                       class="mb-3 rounded-3xl shadow-2xl relative"
                       v-if="data.addons.social.isAdded"
@@ -464,6 +466,7 @@ const clearImage = () => {
                             <div class="w-[55%] pl-1">
                               <input
                                 type="text"
+                                :placeholder="getUrl(social.name)"
                                 class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
                                 :class="defaultTransition"
                                 v-model="social.url"
@@ -585,7 +588,7 @@ const clearImage = () => {
                     </div>
                   </div>
                   <div class="available-addons">
-                    <EditorHeadings :title="'Available Addons'"/>
+                    <EditorHeadings :title="'Available Addons'" />
                     <div class="mb-2">
                       <div class="mb-3" v-if="!data.addons.social.isAdded">
                         <div
@@ -634,7 +637,7 @@ const clearImage = () => {
                 <div class="design" v-if="currentEditorNav === 'design'">
                   <!-- Layout -->
                   <div class="layout pb-7 border-b">
-                    <EditorHeadings :title="'Layout'"/>
+                    <EditorHeadings :title="'Layout'" />
                     <!-- Font Family -->
                     <div class="item flex items-center justify-between mb-5">
                       <label>Font Family</label>
@@ -689,11 +692,10 @@ const clearImage = () => {
                         v-model="data.design.layout.fontWeight"
                       />
                     </div>
-                    
                   </div>
                   <!-- Image -->
                   <div class="image mt-10 pb-6">
-                    <EditorHeadings :title="'Image'"/>
+                    <EditorHeadings :title="'Image'" />
 
                     <!-- Image Width -->
                     <div class="mb-5">
