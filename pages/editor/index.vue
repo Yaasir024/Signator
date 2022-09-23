@@ -4,7 +4,7 @@ const { uid } = useGenerateUid();
 const { socialIcons, addonsSocial } = useEditorIcons();
 
 // Change Editor Route
-const currentEditorNav = ref("addons");
+const currentEditorNav = ref("design");
 const setNavValue = (value) => {
   currentEditorNav.value = value;
 };
@@ -27,11 +27,22 @@ const data = reactive({
       style: {
         height: 22,
         paddingTop: 10,
-      }
+      },
     },
     videoMeeting: {
       isAdded: false,
       items: [],
+    },
+  },
+  design: {
+    layout: {
+      fontFamily: "sans-serif",
+      fontSize: 16,
+      fontWeight: 400,
+      textColor: "#000000",
+    },
+    image: {
+      width: 25,
     },
   },
 });
@@ -89,6 +100,9 @@ const deleteAddons = (addon) => {
 
   console.log(data.addons);
 };
+const checkAddons = () => {
+  return data.addons.social.isAdded || data.addons.videoMeeting.isAdded
+}
 
 const addSocialAddon = (social) => {
   data.addons.social.items.push({
@@ -99,7 +113,9 @@ const addSocialAddon = (social) => {
   console.log(data.addons.social);
 };
 const deleteSocialAddon = (id) => {
-  data.addons.social.items = data.addons.social.items.filter((item) => item.id != id);
+  data.addons.social.items = data.addons.social.items.filter(
+    (item) => item.id != id
+  );
 };
 
 // Add image
@@ -236,7 +252,8 @@ const clearImage = () => {
                         />
                       </div>
                     </div>
-                    <div class="wrapper mt-4 pb-3 text-base">
+                    <div class="wrapper mt-4 pb-6 mb-10 border-b">
+                      <!-- Name -->
                       <div
                         class="form-item flex items-center justify-between my-6"
                       >
@@ -248,6 +265,7 @@ const clearImage = () => {
                           v-model="data.name"
                         />
                       </div>
+                      <!-- Position -->
                       <div
                         class="form-item flex items-center justify-between my-6"
                       >
@@ -259,6 +277,7 @@ const clearImage = () => {
                           v-model="data.position"
                         />
                       </div>
+                      <!-- Company -->
                       <div
                         class="form-item flex items-center justify-between my-6"
                       >
@@ -273,12 +292,8 @@ const clearImage = () => {
                     </div>
 
                     <!-- Contact Info Section -->
-                    <div class="wrapper contact border-t">
-                      <div
-                        class="text-primary-color text-lg font-semibold my-4"
-                      >
-                        Contact Info
-                      </div>
+                    <div class="wrapper contact">
+                      <EditorHeadings :title="'Layout'"/>
                       <div class="my-3">
                         <div
                           class="field flex space-between mt-4 relative"
@@ -350,7 +365,7 @@ const clearImage = () => {
                   </div>
                 </div>
                 <div class="social" v-if="currentEditorNav === 'social'">
-                  <div class="my-3 mb-10">
+                  <div class="my-3 mb-10" v-if="data.socialInfo.length >= 1">
                     <div
                       class="field flex items-center justify-between mt-4 relative"
                       v-for="social in data.socialInfo"
@@ -408,7 +423,8 @@ const clearImage = () => {
                   </div>
                 </div>
                 <div class="addons" v-if="currentEditorNav === 'addons'">
-                  <div class="">
+                  <div class=" border-b pb-7  mb-10" v-if="checkAddons()">
+                    <EditorHeadings :title="'Added Addons'"/>
                     <div
                       class="mb-3 rounded-3xl shadow-2xl relative"
                       v-if="data.addons.social.isAdded"
@@ -497,16 +513,34 @@ const clearImage = () => {
                           <div class="mb-2">
                             <div class="flex items-center justify-between">
                               <span>Height</span>
-                              <span>{{data.addons.social.style.height}}px</span>
+                              <span
+                                >{{ data.addons.social.style.height }}px</span
+                              >
                             </div>
-                            <input type="range" class="win10-thumb" min="20" max="50" v-model="data.addons.social.style.height" />
+                            <input
+                              type="range"
+                              class=""
+                              min="20"
+                              max="50"
+                              v-model="data.addons.social.style.height"
+                            />
                           </div>
-                          <div class="">
+                          <div class="mb-2">
                             <div class="flex items-center justify-between">
                               <span>Padding-Top</span>
-                              <span>{{data.addons.social.style.paddingTop}}px</span>
+                              <span
+                                >{{
+                                  data.addons.social.style.paddingTop
+                                }}px</span
+                              >
                             </div>
-                            <input type="range" class="win10-thumb" min="5" max="20" v-model="data.addons.social.style.paddingTop" />
+                            <input
+                              type="range"
+                              class=""
+                              min="5"
+                              max="20"
+                              v-model="data.addons.social.style.paddingTop"
+                            />
                           </div>
                         </div>
                       </div>
@@ -550,10 +584,8 @@ const clearImage = () => {
                       </div>
                     </div>
                   </div>
-                  <div class="available-addons border-t">
-                    <div class="text-primary-color text-lg font-semibold my-4">
-                      Available Addons
-                    </div>
+                  <div class="available-addons">
+                    <EditorHeadings :title="'Available Addons'"/>
                     <div class="mb-2">
                       <div class="mb-3" v-if="!data.addons.social.isAdded">
                         <div
@@ -599,6 +631,86 @@ const clearImage = () => {
                     </div>
                   </div>
                 </div>
+                <div class="design" v-if="currentEditorNav === 'design'">
+                  <!-- Layout -->
+                  <div class="layout pb-7 border-b">
+                    <EditorHeadings :title="'Layout'"/>
+                    <!-- Font Family -->
+                    <div class="item flex items-center justify-between mb-5">
+                      <label>Font Family</label>
+                      <input
+                        type="text"
+                        class="text-sm w-full max-w-[60%] bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                        :class="defaultTransition"
+                        v-model="data.design.layout.fontFamily"
+                      />
+                    </div>
+                    <!-- Text Color -->
+                    <div class="flex items-center mb-5">
+                      <span class="w-[40%]">Text Color</span>
+
+                      <div
+                        class="relative w-9 h-9 rounded-full bg-red-400"
+                        :style="{ background: data.design.layout.textColor }"
+                      >
+                        <input
+                          type="color"
+                          class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                          v-model="data.design.layout.textColor"
+                        />
+                      </div>
+                    </div>
+                    <!-- Font Size -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Font Size</span>
+                        <span>{{ data.design.layout.fontSize }}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="14"
+                        max="32"
+                        v-model="data.design.layout.fontSize"
+                      />
+                    </div>
+                    <!-- Font Weight -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Font Weight</span>
+                        <span>{{ data.design.layout.fontWeight }}</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="300"
+                        max="600"
+                        step="100"
+                        v-model="data.design.layout.fontWeight"
+                      />
+                    </div>
+                    
+                  </div>
+                  <!-- Image -->
+                  <div class="image mt-10 pb-6">
+                    <EditorHeadings :title="'Image'"/>
+
+                    <!-- Image Width -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Image Width</span>
+                        <span>{{ data.design.image.width }}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="18"
+                        max="32"
+                        v-model="data.design.image.width"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -614,7 +726,4 @@ const clearImage = () => {
   width: 16px;
   fill: red;
 }
-
-
-
 </style>
