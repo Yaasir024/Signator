@@ -11,7 +11,11 @@ const prop = defineProps(["data"]);
       font-family: Arial;
       width: 100%;
     "
-    :style="{ color: data.design.layout.textColor, 'font-size': data.design.layout.fontSize + 'px', }"
+    :style="{
+      color: data.design.layout.textColor,
+      'font-size': data.design.layout.fontSize + 'px',
+      'font-family': data.design.layout.fontFamily,
+    }"
   >
     <tr>
       <table cellpadding="0" style="border-collapse: collapse">
@@ -52,7 +56,7 @@ const prop = defineProps(["data"]);
                 :key="data.id"
               >
                 <td>
-                  <span>{{ data.field}}: {{ data.value }}</span>
+                  <span>{{ data.field }}: {{ data.value }}</span>
                 </td>
               </tr>
               <tr>
@@ -67,7 +71,10 @@ const prop = defineProps(["data"]);
                     "
                   >
                     <a :href="social.url" target="_blank">
-                      <SocialIcon :icon="social.name" />
+                      <IconSocial
+                        :icon="social.name"
+                        :data="data.design.socialIcon"
+                      />
                     </a>
                   </span>
                 </td>
@@ -124,6 +131,27 @@ const prop = defineProps(["data"]);
           </td>
         </tr>
       </table>
+    </tr>
+    <tr v-if="data.addons.cta.isAdded">
+      <td
+        style="margin: 0.1px; width: 100%"
+        :style="{
+          'padding-top': data.addons.cta.style.paddingTop + 'px',
+        }"
+      >
+        <a :href="data.addons.cta.item.url" target="_blank">
+          <div
+            style="
+              display: inline-block;
+              padding: 8px;
+              cursor: pointer;
+            "
+            :style="{background: data.addons.cta.style.buttonColor, color: data.addons.cta.style.textColor}"
+          >
+          Come Join Us at TMNT
+        </div>
+        </a>
+      </td>
     </tr>
   </table>
 </template>

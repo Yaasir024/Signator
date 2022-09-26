@@ -42,10 +42,22 @@ const data = reactive({
         paddingTop: 10,
       },
     },
+    cta: {
+      isAdded: false,
+      item: {
+        text: "",
+        url: "",
+      },
+      style: {
+        paddingTop: 10,
+        textColor: "#ffffff",
+        buttonColor: "#1A0E71",
+      },
+    },
   },
   design: {
     layout: {
-      fontFamily: "sans-serif",
+      fontFamily: "Arial",
       fontSize: 16,
       fontWeight: 400,
       textColor: "#000000",
@@ -55,9 +67,9 @@ const data = reactive({
       width: 120,
     },
     socialIcon: {
-      size: 20,
+      size: 27,
       roundness: 0,
-    }
+    },
   },
 });
 
@@ -115,7 +127,11 @@ const deleteAddons = (addon) => {
   console.log(data.addons);
 };
 const checkAddons = () => {
-  return data.addons.social.isAdded || data.addons.videoMeeting.isAdded;
+  return (
+    data.addons.social.isAdded ||
+    data.addons.videoMeeting.isAdded ||
+    data.addons.cta.isAdded
+  );
 };
 
 const addSocialAddon = (social) => {
@@ -133,6 +149,20 @@ const deleteSocialAddon = (id) => {
 };
 const addVideoMeetingAddon = (name) => {
   data.addons.videoMeeting.items.name = name;
+};
+
+// Font Menu
+const fontMenu = ref(false);
+
+// Toggle Font Menu
+const toggleFontMenu = () => {
+  fontMenu.value = !fontMenu.value;
+};
+
+// Set Font
+const setFont = (font) => {
+  data.design.layout.fontFamily = font;
+  fontMenu.value = false;
 };
 
 // Add image
@@ -600,6 +630,7 @@ const clearImage = () => {
                         </svg>
                       </div>
                     </div>
+                    <!-- Video Meeting -->
                     <div
                       class="mb-3 rounded-3xl shadow-2xl relative"
                       v-if="data.addons.videoMeeting.isAdded"
@@ -776,6 +807,128 @@ const clearImage = () => {
                         </svg>
                       </div>
                     </div>
+                    <!-- CTA -->
+                    <div
+                      class="mb-3 rounded-3xl shadow-2xl relative"
+                      v-if="data.addons.cta.isAdded"
+                    >
+                      <div
+                        class="accordion flex items-center py-4 px-5 border-b"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M13.333 6.805l4.213 7.297-13.256 3.223c-.572.133-1.068.333-1.492.604l-.227-.393c.525-.293.929-.675 1.227-.993l9.535-9.738zm.332-2.626l-11.011 11.244c-.616.66-1.164.977-1.857.977-.244 0-.507-.04-.797-.117l2.646 4.585c.258-1.094.814-1.708 2.006-1.985l15.348-3.732-6.335-10.972zm.31 13.951l-.467 2.118c-.094.378-.391.674-.77.771l-2.951.774c-.365.095-.754-.012-1.018-.28l-1.574-1.712 1.605-.395.646.77c.176.177.433.248.675.186l1.598-.425c.252-.064.449-.261.511-.512l.161-.906 1.584-.389zm8.719-11.267l-2.684 1.613-.756-1.262 2.686-1.612.754 1.261zm-4.396-1.161l-1.335-.616 1.342-2.914 1.335.617-1.342 2.913zm5.619 6.157l-3.202-.174.081-1.469 3.204.175-.083 1.468z"
+                          />
+                        </svg>
+                        <span class="ml-3">Call To Action</span>
+                      </div>
+                      <div class="content py-7 px-8">
+                        <!-- Button URL -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="">
+                            <span>Button Url</span>
+                          </div>
+                          <div class="w-[60%] pl-1">
+                            <input
+                              type="text"
+                              placeholder="Button url goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.cta.item.url"
+                            />
+                          </div>
+                        </div>
+                        <!-- Button Text -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="">
+                            <span>Button Text</span>
+                          </div>
+                          <div class="w-[60%] pl-1">
+                            <input
+                              type="text"
+                              placeholder="Button text goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.cta.item.text"
+                            />
+                          </div>
+                        </div>
+                        <!-- Padding Top -->
+                        <div class="mt-4 mb-2">
+                          <div class="flex items-center justify-between">
+                            <span>Padding-Top</span>
+                            <span
+                              >{{ data.addons.cta.style.paddingTop }}px</span
+                            >
+                          </div>
+                          <input
+                            type="range"
+                            class=""
+                            min="5"
+                            max="20"
+                            v-model="data.addons.cta.style.paddingTop"
+                          />
+                        </div>
+                        <!-- Button Color -->
+                        <div class="flex items-center mb-5">
+                          <span class="w-[40%]">Button Color</span>
+
+                          <div
+                            class="relative w-9 h-9 rounded-full bg-red-400 border"
+                            :style="{
+                              background: data.addons.cta.style.buttonColor,
+                            }"
+                          >
+                            <input
+                              type="color"
+                              class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                              v-model="data.addons.cta.style.buttonColor"
+                            />
+                          </div>
+                        </div>
+                        <!-- Text Color -->
+                        <div class="flex items-center mb-5">
+                          <span class="w-[40%]">Text Color</span>
+
+                          <div
+                            class="relative w-9 h-9 rounded-full bg-red-400 border"
+                            :style="{
+                              background: data.addons.cta.style.textColor,
+                            }"
+                          >
+                            <input
+                              type="color"
+                              class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                              v-model="data.addons.cta.style.textColor"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Close Button -->
+                      <div
+                        class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                        @click="deleteAddons('cta')"
+                      >
+                        <svg
+                          height="16"
+                          width="16"
+                          fill="currentColor"
+                          clip-rule="evenodd"
+                          fill-rule="evenodd"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
                   </div>
                   <div class="available-addons">
                     <EditorHeadings :title="'Available Addons'" />
@@ -797,6 +950,24 @@ const clearImage = () => {
                             />
                           </svg>
                           <span class="ml-3">Social</span>
+                        </div>
+                      </div>
+                      <div class="mb-3" v-if="!data.addons.cta.isAdded">
+                        <div
+                          class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                          @click="addAddons('cta')"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M13.333 6.805l4.213 7.297-13.256 3.223c-.572.133-1.068.333-1.492.604l-.227-.393c.525-.293.929-.675 1.227-.993l9.535-9.738zm.332-2.626l-11.011 11.244c-.616.66-1.164.977-1.857.977-.244 0-.507-.04-.797-.117l2.646 4.585c.258-1.094.814-1.708 2.006-1.985l15.348-3.732-6.335-10.972zm.31 13.951l-.467 2.118c-.094.378-.391.674-.77.771l-2.951.774c-.365.095-.754-.012-1.018-.28l-1.574-1.712 1.605-.395.646.77c.176.177.433.248.675.186l1.598-.425c.252-.064.449-.261.511-.512l.161-.906 1.584-.389zm8.719-11.267l-2.684 1.613-.756-1.262 2.686-1.612.754 1.261zm-4.396-1.161l-1.335-.616 1.342-2.914 1.335.617-1.342 2.913zm5.619 6.157l-3.202-.174.081-1.469 3.204.175-.083 1.468z"
+                            />
+                          </svg>
+                          <span class="ml-3">Call To Action</span>
                         </div>
                       </div>
                       <div
@@ -831,12 +1002,68 @@ const clearImage = () => {
                     <!-- Font Family -->
                     <div class="item flex items-center justify-between mb-5">
                       <label>Font Family</label>
-                      <input
-                        type="text"
-                        class="text-sm w-full max-w-[60%] bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
-                        :class="defaultTransition"
-                        v-model="data.design.layout.fontFamily"
-                      />
+                      <div class="relative max-w-[60%] w-full">
+                        <div
+                          class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
+                          :style="{
+                            'font-family': data.design.layout.fontFamily,
+                          }"
+                          @click="toggleFontMenu"
+                        >
+                          {{ data.design.layout.fontFamily }}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            fill="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M12 21l-12-18h24z" />
+                          </svg>
+                        </div>
+                        <transition name="menu">
+                          <div
+                            class="absolute top-[45px] left-0 z-30 w-full bg-white shadow border rounded-b-2xl overflow-hidden"
+                            v-if="fontMenu"
+                          >
+                            <div
+                              class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                              style="font-family: Arial"
+                              @click="setFont('Arial')"
+                            >
+                              <span>Arial</span>
+                            </div>
+                            <div
+                              class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                              style="font-family: Arial Black"
+                              @click="setFont('Arial Black')"
+                            >
+                              <span>Arial Black</span>
+                            </div>
+                            <div
+                              class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                              style="font-family: cursive"
+                              @click="setFont('cursive')"
+                            >
+                              <span>Cursive</span>
+                            </div>
+                            <div
+                              class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                              style="font-family: Sans Serif"
+                              @click="setFont('Sans Serif')"
+                            >
+                              <span>Sans Serif</span>
+                            </div>
+                            <div
+                              class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                              style="font-family: Verdana"
+                              @click="setFont('Verdana')"
+                            >
+                              <span>Verdana</span>
+                            </div>
+                          </div>
+                        </transition>
+                      </div>
                     </div>
                     <!-- Text Color -->
                     <div class="flex items-center mb-5">
@@ -932,8 +1159,8 @@ const clearImage = () => {
                       <input
                         type="range"
                         class=""
-                        min="50"
-                        max="200"
+                        min="25"
+                        max="35"
                         v-model="data.design.socialIcon.size"
                       />
                     </div>
@@ -941,7 +1168,7 @@ const clearImage = () => {
                     <div class="mb-5">
                       <div class="flex items-center justify-between">
                         <span>Icon Shape</span>
-                        <span>{{ data.design.socialIcon.shape }}px</span>
+                        <span>{{ data.design.socialIcon.roundness }}%</span>
                       </div>
                       <input
                         type="range"
@@ -949,7 +1176,7 @@ const clearImage = () => {
                         min="0"
                         max="50"
                         step="25"
-                        v-model="data.design.socialIcon.shape"
+                        v-model="data.design.socialIcon.roundness"
                       />
                     </div>
                   </div>
@@ -968,5 +1195,17 @@ const clearImage = () => {
   height: 16px;
   width: 16px;
   fill: red;
+}
+
+/* Menu Animation */
+.menu-enter-active,
+.menu-leave-active {
+  transition: transform 0.3s ease;
+  transform-origin: top left;
+}
+
+.menu-enter-from,
+.menu-leave-to {
+  transform: scale(0);
 }
 </style>

@@ -125,7 +125,7 @@ const prop = defineProps(["data"]);
                             "
                           >
                             <a :href="social.url" target="_blank">
-                              <SocialIcon :icon="social.name" />
+                                <IconSocial :icon="social.name" :data="data.design.socialIcon" />
                             </a>
                           </span>
                         </td>
