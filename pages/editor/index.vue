@@ -33,9 +33,9 @@ const data = reactive({
     videoMeeting: {
       isAdded: false,
       items: {
-        name: 'zoom',
-        text: 'Meet me on zoom',
-        url: ''
+        name: "zoom",
+        text: "Meet me on ",
+        url: "",
       },
       style: {
         height: 22,
@@ -126,6 +126,9 @@ const deleteSocialAddon = (id) => {
   data.addons.social.items = data.addons.social.items.filter(
     (item) => item.id != id
   );
+};
+const addVideoMeetingAddon = (name) => {
+  data.addons.videoMeeting.items.name = name;
 };
 
 // Add image
@@ -616,7 +619,10 @@ const clearImage = () => {
                       <div class="content py-7 px-8">
                         <div class="flex flex-wrap">
                           <!-- Zoom -->
-                          <div class="flex flex-50% p-2">
+                          <div
+                            class="flex flex-50% p-2"
+                            @click="addVideoMeetingAddon('zoom')"
+                          >
                             <div
                               class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
                             >
@@ -634,7 +640,10 @@ const clearImage = () => {
                             </div>
                           </div>
                           <!-- Google Meet -->
-                          <div class="flex flex-50% p-2">
+                          <div
+                            class="flex flex-50% p-2"
+                            @click="addVideoMeetingAddon('google-meet')"
+                          >
                             <div
                               class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
                             >
@@ -653,7 +662,10 @@ const clearImage = () => {
                             </div>
                           </div>
                           <!-- Skype -->
-                          <div class="flex flex-50% p-2">
+                          <div
+                            class="flex flex-50% p-2"
+                            @click="addVideoMeetingAddon('skype')"
+                          >
                             <div
                               class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
                             >
@@ -737,6 +749,27 @@ const clearImage = () => {
                             v-model="data.addons.videoMeeting.style.paddingTop"
                           />
                         </div>
+                      </div>
+                      <!-- Close Button -->
+                      <div
+                        class="flex items-center justify-center absolute right-[-20px] top-3 cursor-pointer"
+                        @click="deleteAddons('videoMeeting')"
+                      >
+                        <svg
+                          height="16"
+                          width="16"
+                          fill="currentColor"
+                          clip-rule="evenodd"
+                          fill-rule="evenodd"
+                          stroke-linejoin="round"
+                          stroke-miterlimit="2"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                          />
+                        </svg>
                       </div>
                     </div>
                   </div>

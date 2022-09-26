@@ -147,13 +147,8 @@ const prop = defineProps(["data"]);
                       </tr>
                     </tbody>
                   </table>
-                  <table
-                    cellspacing="0"
-                    cellpadding="0"
-                    border-0
-                    v-if="data.addons.social.isAdded"
-                  >
-                    <tr>
+                  <table cellspacing="0" cellpadding="0" border-0>
+                    <tr v-if="data.addons.social.isAdded">
                       <td
                         style="margin: 0.1px"
                         :style="{
@@ -161,7 +156,6 @@ const prop = defineProps(["data"]);
                             data.addons.social.style.paddingTop + 'px',
                         }"
                       >
-                      
                         <span
                           v-for="social in data.addons.social.items"
                           :key="social.id"
@@ -189,6 +183,22 @@ const prop = defineProps(["data"]);
                         </span>
                       </td>
                     </tr>
+                    <tr v-if="data.addons.videoMeeting.isAdded">
+                      <td
+                        style="margin: 0.1px"
+                        :style="{
+                          'padding-top':
+                            data.addons.videoMeeting.style.paddingTop + 'px',
+                        }"
+                      >
+                        <a :href="data.addons.videoMeeting.items.url" target="_blank">
+                          <IconVideoMeeting
+                            :type="data.addons.videoMeeting.items.name"
+                            :text="data.addons.videoMeeting.items.text"
+                          />
+                        </a>
+                      </td>
+                    </tr>
                   </table>
                 </td>
               </tr>
@@ -196,7 +206,6 @@ const prop = defineProps(["data"]);
           </table>
         </div>
         <div class="footer">Save</div>
-        <IconVideoMeeting :type="data.addons.videoMeeting.items.type" :text="data.addons.videoMeeting.items.text" />
       </div>
     </div>
   </div>
