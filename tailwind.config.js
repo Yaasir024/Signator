@@ -20,7 +20,7 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
-      colors : {
+      colors: {
         "canvas-color": "#f3f2ef",
         "primary-color": "#0000ff",
         "secondary-color": "#3f5375",
@@ -29,11 +29,12 @@ module.exports = {
         "25%": "0 0 25%",
         "75%": "0 0 75%",
         "50%": "0 0 50%",
-        "full": "0 0 100%",
         "66.66%": "0 0 66.6666%",
         "33.33%": "0 0 33.3333%",
+        full: "0 0 100%",
+        "475px": "0 0 475px",
       },
     },
   },
   plugins: [],
-}
+};
