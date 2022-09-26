@@ -54,6 +54,10 @@ const data = reactive({
     image: {
       width: 120,
     },
+    socialIcon: {
+      size: 20,
+      roundness: 0,
+    }
   },
 });
 
@@ -912,6 +916,40 @@ const clearImage = () => {
                         min="50"
                         max="200"
                         v-model="data.design.image.width"
+                      />
+                    </div>
+                  </div>
+                  <!-- Social Icon -->
+                  <div class="social-icon mt-10 pb-6">
+                    <EditorHeadings :title="'Social Icon'" />
+
+                    <!-- Icon Width -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Icon Size</span>
+                        <span>{{ data.design.socialIcon.size }}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="50"
+                        max="200"
+                        v-model="data.design.socialIcon.size"
+                      />
+                    </div>
+                    <!-- Icon Shape -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Icon Shape</span>
+                        <span>{{ data.design.socialIcon.shape }}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="0"
+                        max="50"
+                        step="25"
+                        v-model="data.design.socialIcon.shape"
                       />
                     </div>
                   </div>
