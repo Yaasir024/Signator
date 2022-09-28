@@ -59,12 +59,12 @@ const data = reactive({
     layout: {
       fontFamily: "Arial",
       fontSize: 16,
-      fontWeight: 400,
       textColor: "#000000",
       templateColor: "#000000",
     },
     image: {
       width: 120,
+      roundness: 0,
     },
     socialIcon: {
       size: 27,
@@ -102,13 +102,14 @@ const deleteContanctItem = (id) => {
 
 // Add New Social Item
 const addNewSocialItem = (social) => {
-  data.socialInfo.push({
-    id: uid(6),
-    name: social,
-    url: "",
-  });
-  socialSearchQuery.value = "";
-  console.log(data.socialInfo);
+  if (!data.socialInfo.some((e) => e.name === social)) {
+    data.socialInfo.push({
+      id: uid(6),
+      name: social,
+      url: "",
+    });
+    socialSearchQuery.value = "";
+  }
 };
 
 // Delete Social Item
@@ -134,36 +135,47 @@ const checkAddons = () => {
   );
 };
 
+/*  SOCIAL ADDON  */
+// Add Social Addon
 const addSocialAddon = (social) => {
-  data.addons.social.items.push({
-    id: uid(6),
-    name: social,
-    url: "",
-  });
-  console.log(data.addons.social);
+  if (!data.addons.social.items.some((e) => e.name === social)) {
+    data.addons.social.items.push({
+      id: uid(6),
+      name: social,
+      url: "",
+    });
+  }
 };
+// Delete Social Addon
 const deleteSocialAddon = (id) => {
   data.addons.social.items = data.addons.social.items.filter(
     (item) => item.id != id
   );
 };
+
+/* VIDEO MEETING ADDON */
+// Add video meeting
 const addVideoMeetingAddon = (name) => {
   data.addons.videoMeeting.items.name = name;
 };
 
+/* FONT MENU BAR */
 // Font Menu
 const fontMenu = ref(false);
-
 // Toggle Font Menu
 const toggleFontMenu = () => {
   fontMenu.value = !fontMenu.value;
 };
-
 // Set Font
 const setFont = (font) => {
   data.design.layout.fontFamily = font;
   fontMenu.value = false;
 };
+// On Click Outside
+const fontMenuBar = ref(null);
+useClickOutside(fontMenuBar, () => {
+  fontMenu.value = false;
+});
 
 // Add image
 const previewImage = (event) => {
@@ -975,21 +987,41 @@ const clearImage = () => {
                         v-if="!data.addons.videoMeeting.isAdded"
                       >
                         <div
-                          class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
+                          class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-xl cursor-pointer"
                           @click="addAddons('videoMeeting')"
                         >
-                          <svg
-                            width="24"
-                            height="24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                          >
-                            <path
-                              d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
-                            />
-                          </svg>
-                          <span class="ml-3">Video Meeting</span>
+                          <div class="flex items-center">
+                            <svg
+                              width="24"
+                              height="24"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                            >
+                              <path
+                                d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
+                              />
+                            </svg>
+
+                            <span class="ml-3">Video Meeting</span>
+                          </div>
+                          <div class="relative">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                d="M18 10v-4c0-3.313-2.687-6-6-6s-6 2.687-6 6v4h-3v14h18v-14h-3zm-10 0v-4c0-2.206 1.794-4 4-4s4 1.794 4 4v4h-8z"
+                              />
+                            </svg>
+                            <div
+                              class="absolute top-[30px] right-[-60px] min-w-[220px] py-2 px-3 bg-canvas-color"
+                            >
+                              Upgrage to use PRO Features
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1002,7 +1034,10 @@ const clearImage = () => {
                     <!-- Font Family -->
                     <div class="item flex items-center justify-between mb-5">
                       <label>Font Family</label>
-                      <div class="relative max-w-[60%] w-full">
+                      <div
+                        class="relative max-w-[60%] w-full"
+                        ref="fontMenuBar"
+                      >
                         <div
                           class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
                           :style="{
@@ -1070,7 +1105,7 @@ const clearImage = () => {
                       <span class="w-[40%]">Text Color</span>
 
                       <div
-                        class="relative w-9 h-9 rounded-full bg-red-400"
+                        class="relative w-9 h-9 rounded-full bg-red-400 border"
                         :style="{ background: data.design.layout.textColor }"
                       >
                         <input
@@ -1085,7 +1120,7 @@ const clearImage = () => {
                       <span class="w-[40%]">Template Color</span>
 
                       <div
-                        class="relative w-9 h-9 rounded-full bg-red-400"
+                        class="relative w-9 h-9 rounded-full bg-red-400 border"
                         :style="{
                           background: data.design.layout.templateColor,
                         }"
@@ -1111,26 +1146,10 @@ const clearImage = () => {
                         v-model="data.design.layout.fontSize"
                       />
                     </div>
-                    <!-- Font Weight -->
-                    <div class="mb-5">
-                      <div class="flex items-center justify-between">
-                        <span>Font Weight</span>
-                        <span>{{ data.design.layout.fontWeight }}</span>
-                      </div>
-                      <input
-                        type="range"
-                        class=""
-                        min="300"
-                        max="600"
-                        step="100"
-                        v-model="data.design.layout.fontWeight"
-                      />
-                    </div>
                   </div>
                   <!-- Image -->
                   <div class="image mt-10 pb-6">
                     <EditorHeadings :title="'Image'" />
-
                     <!-- Image Width -->
                     <div class="mb-5">
                       <div class="flex items-center justify-between">
@@ -1143,6 +1162,21 @@ const clearImage = () => {
                         min="50"
                         max="200"
                         v-model="data.design.image.width"
+                      />
+                    </div>
+                    <!-- Image Shape -->
+                    <div class="mb-5">
+                      <div class="flex items-center justify-between">
+                        <span>Image Shape</span>
+                        <span>{{ data.design.image.roundness }}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        class=""
+                        min="0"
+                        max="50"
+                        step="5"
+                        v-model="data.design.image.roundness"
                       />
                     </div>
                   </div>
