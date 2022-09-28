@@ -13,7 +13,7 @@ const prop = defineProps(["data"]);
           <!-- <Layouts01 :data="data" /> -->
           <Layouts02 :data="data" />
         </div>
-        <div class="footer">Save</div>
+        <div class="footer px-7 py-4 border-t">Save</div>
       </div>
     </div>
   </div>

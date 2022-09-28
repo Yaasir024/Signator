@@ -9,7 +9,7 @@ const prop = defineProps(["data"]);
       vertical-align: -webkit-baseline-middle;
       /* font-size: medium; */
       font-family: Arial;
-      width: 100%;
+      width: 500px;
     "
     :style="{
       color: data.design.layout.textColor,
@@ -25,7 +25,7 @@ const prop = defineProps(["data"]);
               :src="data.image.imgSrc || '/images/placeholder-small.jpg'"
               alt=""
               style="display: inline-block"
-              :style="{ width: data.design.image.width + 'px' }"
+              :style="{ width: data.design.image.width + 'px', borderRadius: data.design.image.roundness + '%' }"
             />
           </td>
           <td style="padding-left: 16px" valign="top">
@@ -143,12 +143,16 @@ const prop = defineProps(["data"]);
           <div
             style="
               display: inline-block;
-              padding: 8px;
+              padding: 0px 8px;
               cursor: pointer;
+              font-size: 18px;
+              font-weight: bold;
+              line-height: 36px;
+              min-width: 100px;
             "
             :style="{background: data.addons.cta.style.buttonColor, color: data.addons.cta.style.textColor}"
           >
-          Come Join Us at TMNT
+          {{data.addons.cta.item.text}}
         </div>
         </a>
       </td>
