@@ -50,7 +50,7 @@ const data = reactive({
       },
       style: {
         paddingTop: 10,
-        textColor: "#ffffff",
+        textColor: "#ffffffc",
         buttonColor: "#1A0E71",
       },
     },
@@ -193,6 +193,10 @@ const previewImage = (event) => {
 const clearImage = () => {
   data.image.imgSrc = "";
 };
+
+const printData = () => {
+  console.log(data)
+}
 </script>
 
 <template>
@@ -1215,6 +1219,7 @@ const clearImage = () => {
                     </div>
                   </div>
                 </div>
+                <button @click="printData()">PRINT</button>
               </div>
             </div>
           </div>
