@@ -1189,10 +1189,11 @@ const isObjEmpty = (obj) => {
           </div>
         </div>
       </aside>
-      <div class="main">
-        
-      </div>
-      <div class="">{{ isObjEmpty(data) }}</div>
+      <main class="w-full h-full px-4 overflow-y-auto">
+        <div class="flex h-full items-center justify-center">
+            <EditorPreview :data="data" />
+        </div>
+      </main>
     </section>
   </div>
 
