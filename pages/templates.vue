@@ -1,15 +1,50 @@
 <script setup>
 const { defaultTransition } = useTailwindConfig();
+const { templates } = useTemplatesData();
+const { uid } = useGenerateUid();
+const router = useRouter();
+
+// https://www.youtube.com/watch?v=URTeTJ5tDrQ
+// https://www.youtube.com/watch?v=2C2sxQ4hiS8
+
+// Filter
 const filterValue = ref("all");
 const filter = (value) => {
   filterValue.value = value;
 };
+
+// Filtered Templates
+
+const filteredTemplates = computed(() => {
+  return templates.filter((template) => {
+    if (filterValue.value === "professional") {
+      return template.category === "professional";
+    }
+    if (filterValue.value === "creative") {
+      return template.category === "creative";
+    }
+    return template;
+  });
+});
+
+const createEditorSession = (data) => {
+  let sessionId = uid(16);
+  let editorSession = {
+    data: data,
+  };
+  console.log(editorSession);
+  localStorage.setItem(sessionId, JSON.stringify(data));
+  router.push({ path: `/editor/${sessionId}` });
+};
+
+//
+const user = ref("pro");
 </script>
 
 <template>
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
-    <main class="px-8">
+    <main class="px-8 pb-20">
       <section class="hero py-32">
         <div class="wrapper text-center">
           <h1 class="text-4xl font-medium mb-3">Email Signature Templates</h1>
@@ -54,10 +89,33 @@ const filter = (value) => {
       </ul>
       <div class="mt-12">
         <div class="flex flex-wrap max-w-[1140px] mx-auto">
-          <div class="flex-33.33% w-full px-3 my-2" v-for="i in 12" :key="i">
-            <div class="p-5 bg-white shadow-lg rounded-xl">
-              <img :src="'/images/templates/' + i + '.PNG'" alt="" />
-              {{ i }}
+          <div
+            class="flex-full md:flex-50% lg:flex-33.33% w-full px-3 my-2"
+            v-for="template in filteredTemplates"
+            :key="template.id"
+          >
+            <div
+              class="card p-5 bg-white shadow-lg rounded-xl relative cursor-pointer"
+            >
+              <img :src="'/images/templates/' + template.id + '.PNG'" alt="" />
+              <div
+                class="overlay absolute w-full h-full top-0 left-0 flex items-center justify-center bg-[#ffffffb3] opacity-0 transition-all ease-in-out duration-350"
+              >
+                <!-- :to="`/editor/${template.name}`" -->
+                <button
+                  class="bg-primary-color text-white py-2 px-3 rounded-2xl"
+                  v-if="template.type == user || user == 'pro'"
+                  @click="createEditorSession(template.data)"
+                >
+                  Customize This Template
+                </button>
+                <button
+                  class="bg-primary-color text-white py-2 px-3 rounded-2xl"
+                  v-else
+                >
+                  Upgrade To Pro to Unlock
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -68,6 +126,9 @@ const filter = (value) => {
 </template>
 
 <style scoped>
+.card:hover .overlay {
+  opacity: 1;
+}
 .filter-link.active {
   color: #000000;
   font-weight: 500;
@@ -77,7 +138,7 @@ const filter = (value) => {
   position: absolute;
   width: 22px;
   height: 2px;
-  background: #4255d4;
+  background: #ffffffb3;
   left: 0;
   bottom: 0;
 }
