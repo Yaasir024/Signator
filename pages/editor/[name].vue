@@ -64,13 +64,15 @@ const filteredSocialData = computed(() => {
 
 /*  ADDONS SECTION */
 const addonsDetailsVisibility = reactive({
+  signoff: false,
   social: false,
   videoMeeting: false,
-  cta: false
-})
+  cta: false,
+});
 const showAddonDetail = (addon) => {
-  console.log(addonsDetailsVisibility[addon])
-}
+  addonsDetailsVisibility[addon] = !addonsDetailsVisibility[addon];
+  console.log(addonsDetailsVisibility[addon]);
+};
 
 // Add addon
 const addAddons = (addon) => {
@@ -92,6 +94,25 @@ const checkAddons = () => {
     data.addons.cta.isAdded
   );
 };
+
+/*  SignOFF ADDON  */
+// Font Menu
+const signoffFontMenu = ref(false);
+// Toggle Font Menu
+const toggleSignoffFontMenu = () => {
+  signoffFontMenu.value = !signoffFontMenu.value;
+};
+// Set Font
+const setSignoffFont = (font) => {
+  data.addons.signoff.style.fontFamily = font;
+  signoffFontMenu.value = false;
+};
+// FontMenu On Click Outside
+const signoffFontMenuBar = ref(null);
+useClickOutside(signoffFontMenuBar, () => {
+  signoffFontMenu.value = false;
+});
+
 /*  SOCIAL ADDON  */
 // Add Social Addon
 const addSocialAddon = (social) => {
@@ -518,101 +539,509 @@ const isObjEmpty = (obj) => {
                 <div class="border-b pb-7 mb-10" v-if="checkAddons()">
                   <EditorHeadings :title="'Added Addons'" />
                   <div
-                    class="mb-12 rounded-3xl shadow-xl border relative"
-                    v-if="data.addons.social.isAdded"
+                    class="rounded-3xl shadow-lg border relative overflow-hidden"
+                    v-if="data.addons.signoff.isAdded"
+                    :class="addonsDetailsVisibility.signoff ? 'mb-5' : 'mb-12'"
                   >
-                    <div class="accordion flex items-center py-4 px-5 border-b" @click="showAddonDetail('social')">
-                      <svg
-                        width="24"
-                        height="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M16.272 5.451c-.176-.45-.272-.939-.272-1.451 0-2.208 1.792-4 4-4s4 1.792 4 4-1.792 4-4 4c-1.339 0-2.525-.659-3.251-1.67l-7.131 3.751c.246.591.382 1.239.382 1.919 0 .681-.136 1.33-.384 1.922l7.131 3.751c.726-1.013 1.913-1.673 3.253-1.673 2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4c0-.51.096-.999.27-1.447l-7.129-3.751c-.9 1.326-2.419 2.198-4.141 2.198-2.76 0-5-2.24-5-5s2.24-5 5-5c1.723 0 3.243.873 4.143 2.201l7.129-3.75zm3.728 11.549c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm-15-9c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm15-7c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z"
-                        />
-                      </svg>
-                      <span class="ml-3">Social</span>
-                    </div>
-                    <div class="content py-7 px-5">
-                      <div class="">
-                        <div
-                          class="field flex items-center justify-between mt-4 relative"
-                          v-for="social in data.addons.social.items"
-                          :key="social.id"
+                    <div
+                      class="accordion flex items-center justify-between py-4 px-5 border-b"
+                      @click="showAddonDetail('signoff')"
+                    >
+                      <div class="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
                         >
-                          <div class="w-[40%] pr-1">
-                            <img
-                              :src="
-                                '/icons/addons/' + social.name + '_1' + '.png'
-                              "
-                              alt=""
-                              class="w-full"
+                          <path
+                            d="M13.473 9.196c-.425-.439-.401-1.127.035-1.552l4.461-4.326c.218-.211.498-.318.775-.318.282 0 .563.11.776.331l-6.047 5.865zm-7.334 11.021c-.092.089-.139.208-.139.327 0 .25.204.456.456.456.114 0 .229-.042.317-.128l.749-.729-.633-.654-.75.728zm6.33-8.425l-2.564 2.485c-1.378 1.336-2.081 2.63-2.73 4.437l1.132 1.169c1.825-.593 3.14-1.255 4.518-2.591l2.563-2.486-2.919-3.014zm7.477-7.659l-6.604 6.405 3.326 3.434 6.604-6.403c.485-.469.728-1.093.728-1.718 0-2.088-2.53-3.196-4.054-1.718zm-19.946 16.867h4v-1h-4v1z"
+                          />
+                        </svg>
+                        <span class="ml-3">SignOff</span>
+                      </div>
+                      <div
+                        class="flex items-center justify-center cursor-pointer"
+                        @click="deleteAddons('signoff')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div
+                      class="overflow-hidden transition-all ease-in-out duration-300"
+                      :class="
+                        addonsDetailsVisibility.signoff
+                          ? 'max-h-0'
+                          : 'max-h-[500px]'
+                      "
+                    >
+                      <div class="content py-7 px-5">
+                        <div class="options mb-2">
+                          <div class="flex flex-wrap">
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="best-regards" value="Best Regards," v-model="data.addons.signoff.value">
+                              <label for="best-regards" class="ml-1">Best Regards,</label>
+                            </div>
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="best" value="Best," v-model="data.addons.signoff.value">
+                              <label for="best" class="ml-1">Best,</label>
+                            </div>
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="best-wishes" value="Best Wishes," v-model="data.addons.signoff.value">
+                              <label for="best-wishes" class="ml-1">Best Wishes,</label>
+                            </div>
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="regards" value="Regards," v-model="data.addons.signoff.value">
+                              <label for="regards" class="ml-1">Regards,</label>
+                            </div>
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="thanks" value="Thanks," v-model="data.addons.signoff.value">
+                              <label for="thanks" class="ml-1">Thanks,</label>
+                            </div>
+                            <div class="flex items-center flex-50% p-1 text-lg cursor-pointer">
+                              <input type="radio" id="sincerely" value="Sincerely," v-model="data.addons.signoff.value">
+                              <label for="sincerely" class="ml-1">Sincerely,</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="styles my-5">
+                          <!-- Font Family -->
+                          <div
+                            class="item flex items-center justify-between mb-5"
+                          >
+                            <label class="w-[35%]">Font Family</label>
+                            <div
+                              class="relative max-w-[65%] w-full"
+                              ref="signoffFontMenuBar"
+                            >
+                              <div
+                                class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
+                                :style="{
+                                  'font-family':
+                                    data.addons.signoff.style.fontFamily,
+                                }"
+                                @click="toggleSignoffFontMenu()"
+                              >
+                                {{ data.addons.signoff.style.fontFamily }}
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="14"
+                                  height="14"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path d="M12 21l-12-18h24z" />
+                                </svg>
+                              </div>
+                              <transition name="menu">
+                                <div
+                                  class="absolute top-[45px] left-0 z-30 w-full bg-white shadow border rounded-b-2xl overflow-hidden"
+                                  v-if="signoffFontMenu"
+                                >
+                                  <div
+                                    class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                    style="font-family: Arial"
+                                    @click="setSignoffFont('Arial')"
+                                  >
+                                    <span>Arial</span>
+                                  </div>
+                                  <div
+                                    class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                    style="font-family: Arial Black"
+                                    @click="setSignoffFont('Arial Black')"
+                                  >
+                                    <span>Arial Black</span>
+                                  </div>
+                                  <div
+                                    class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                    style="font-family: cursive"
+                                    @click="setSignoffFont('cursive')"
+                                  >
+                                    <span>Cursive</span>
+                                  </div>
+                                  <div
+                                    class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                    style="font-family: Sans Serif"
+                                    @click="setSignoffFont('Sans Serif')"
+                                  >
+                                    <span>Sans Serif</span>
+                                  </div>
+                                  <div
+                                    class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                    style="font-family: Verdana"
+                                    @click="setSignoffFont('Verdana')"
+                                  >
+                                    <span>Verdana</span>
+                                  </div>
+                                </div>
+                              </transition>
+                            </div>
+                          </div>
+                          <!-- Text Color -->
+                          <div class="flex items-center mb-5">
+                            <span class="w-[40%]">Text Color</span>
+
+                            <div
+                              class="relative w-9 h-9 rounded-full"
+                              :style="{
+                                background: data.addons.signoff.style.color,
+                              }"
+                            >
+                              <input
+                                type="color"
+                                class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                                v-model="data.addons.signoff.style.color"
+                              />
+                            </div>
+                          </div>
+                          <!-- Font Size -->
+                          <div class="mb-5">
+                            <div class="flex items-center justify-between">
+                              <span>Font Size</span>
+                              <span
+                                >{{
+                                  data.addons.signoff.style.fontSize
+                                }}px</span
+                              >
+                            </div>
+                            <input
+                              type="range"
+                              class=""
+                              min="20"
+                              max="50"
+                              v-model="data.addons.signoff.style.fontSize"
                             />
                           </div>
-                          <div class="w-[60%] pl-1">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    class="rounded-3xl shadow-lg border relative overflow-hidden"
+                    v-if="data.addons.social.isAdded"
+                    :class="addonsDetailsVisibility.social ? 'mb-5' : 'mb-12'"
+                  >
+                    <div
+                      class="accordion flex items-center justify-between py-4 px-5 border-b"
+                      @click="showAddonDetail('social')"
+                    >
+                      <div class="flex items-center">
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        >
+                          <path
+                            d="M16.272 5.451c-.176-.45-.272-.939-.272-1.451 0-2.208 1.792-4 4-4s4 1.792 4 4-1.792 4-4 4c-1.339 0-2.525-.659-3.251-1.67l-7.131 3.751c.246.591.382 1.239.382 1.919 0 .681-.136 1.33-.384 1.922l7.131 3.751c.726-1.013 1.913-1.673 3.253-1.673 2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4c0-.51.096-.999.27-1.447l-7.129-3.751c-.9 1.326-2.419 2.198-4.141 2.198-2.76 0-5-2.24-5-5s2.24-5 5-5c1.723 0 3.243.873 4.143 2.201l7.129-3.75zm3.728 11.549c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3zm-15-9c2.208 0 4 1.792 4 4s-1.792 4-4 4-4-1.792-4-4 1.792-4 4-4zm15-7c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z"
+                          />
+                        </svg>
+                        <span class="ml-3">Social</span>
+                      </div>
+                      <div
+                        class="flex items-center justify-center cursor-pointer"
+                        @click="deleteAddons('social')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <div
+                      class="overflow-hidden transition-all ease-in-out duration-300"
+                      :class="
+                        addonsDetailsVisibility.social
+                          ? 'max-h-0'
+                          : 'max-h-[500px]'
+                      "
+                    >
+                      <div class="content py-7 px-5">
+                        <div class="">
+                          <div
+                            class="field flex items-center justify-between mt-4 relative"
+                            v-for="social in data.addons.social.items"
+                            :key="social.id"
+                          >
+                            <div class="w-[40%] pr-1">
+                              <img
+                                :src="
+                                  '/icons/addons/' + social.name + '_1' + '.png'
+                                "
+                                alt=""
+                                class="w-full"
+                              />
+                            </div>
+                            <div class="w-[60%] pl-1">
+                              <input
+                                type="text"
+                                :placeholder="getUrl(social.name)"
+                                class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
+                                :class="defaultTransition"
+                                v-model="social.url"
+                              />
+                            </div>
+                            <div
+                              class="flex items-center justify-center absolute right-[-16px] top-3 cursor-pointer"
+                              @click="deleteSocialAddon(social.id)"
+                            >
+                              <svg
+                                height="16"
+                                width="16"
+                                fill="currentColor"
+                                clip-rule="evenodd"
+                                fill-rule="evenodd"
+                                stroke-linejoin="round"
+                                stroke-miterlimit="2"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="icons my-6">
+                          <div class="flex flex-wrap">
+                            <div
+                              class="max-w-[33.3333%] p-1 cursor-pointer"
+                              v-for="icon in addonsSocial"
+                              :key="icon.id"
+                              @click="addSocialAddon(icon.name)"
+                            >
+                              <img
+                                :src="
+                                  '/icons/addons/' + icon.name + '_1' + '.png'
+                                "
+                                class="w-full"
+                                alt=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="styles my-5">
+                          <!-- Height -->
+                          <div class="mb-2">
+                            <div class="flex items-center justify-between">
+                              <span>Height</span>
+                              <span
+                                >{{ data.addons.social.style.height }}px</span
+                              >
+                            </div>
+                            <input
+                              type="range"
+                              class=""
+                              min="20"
+                              max="50"
+                              v-model="data.addons.social.style.height"
+                            />
+                          </div>
+                          <!-- Padding Top -->
+                          <div class="mb-2">
+                            <div class="flex items-center justify-between">
+                              <span>Padding-Top</span>
+                              <span
+                                >{{
+                                  data.addons.social.style.paddingTop
+                                }}px</span
+                              >
+                            </div>
+                            <input
+                              type="range"
+                              class=""
+                              min="5"
+                              max="20"
+                              v-model="data.addons.social.style.paddingTop"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Video Meeting -->
+                  <div
+                    class="rounded-3xl shadow-lg border relative overflow-hidden"
+                    v-if="data.addons.videoMeeting.isAdded"
+                    :class="
+                      addonsDetailsVisibility.videoMeeting ? 'mb-5' : 'mb-12'
+                    "
+                  >
+                    <div
+                      class="accordion flex items-center justify-between py-4 px-5 border-b"
+                      @click="showAddonDetail('videoMeeting')"
+                    >
+                      <div class="flex items-center">
+                        <svg
+                          width="24"
+                          height="24"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                        >
+                          <path
+                            d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
+                          />
+                        </svg>
+                        <span class="ml-3">Video Meeting</span>
+                      </div>
+                      <!-- Close -->
+                      <div
+                        class="flex items-center justify-center cursor-pointer"
+                        @click="deleteAddons('videoMeeting')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <!-- Content -->
+                    <div
+                      class="overflow-hidden transition-all ease-in-out duration-300"
+                      :class="
+                        addonsDetailsVisibility.videoMeeting
+                          ? 'max-h-0'
+                          : 'max-h-[500px]'
+                      "
+                    >
+                      <div class="content py-7 px-5">
+                        <div class="flex flex-wrap">
+                          <!-- Zoom -->
+                          <div
+                            class="flex flex-50% p-2"
+                            @click="addVideoMeetingAddon('zoom')"
+                          >
+                            <div
+                              class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  d="M16 18c0 1.104-.896 2-2 2h-12c-1.105 0-2-.896-2-2v-12c0-1.104.895-2 2-2h12c1.104 0 2 .896 2 2v12zm8-14l-6 6.223v3.554l6 6.223v-16z"
+                                />
+                              </svg>
+                              <span class="ml-2">Zoom</span>
+                            </div>
+                          </div>
+                          <!-- Skype -->
+                          <div
+                            class="flex flex-50% p-2"
+                            @click="addVideoMeetingAddon('skype')"
+                          >
+                            <div
+                              class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
+                            >
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 448 512"
+                                width="16"
+                                height="16"
+                              >
+                                <path
+                                  d="M424.7 299.8c2.9-14 4.7-28.9 4.7-43.8 0-113.5-91.9-205.3-205.3-205.3-14.9 0-29.7 1.7-43.8 4.7C161.3 40.7 137.7 32 112 32 50.2 32 0 82.2 0 144c0 25.7 8.7 49.3 23.3 68.2-2.9 14-4.7 28.9-4.7 43.8 0 113.5 91.9 205.3 205.3 205.3 14.9 0 29.7-1.7 43.8-4.7 19 14.6 42.6 23.3 68.2 23.3 61.8 0 112-50.2 112-112 .1-25.6-8.6-49.2-23.2-68.1zm-194.6 91.5c-65.6 0-120.5-29.2-120.5-65 0-16 9-30.6 29.5-30.6 31.2 0 34.1 44.9 88.1 44.9 25.7 0 42.3-11.4 42.3-26.3 0-18.7-16-21.6-42-28-62.5-15.4-117.8-22-117.8-87.2 0-59.2 58.6-81.1 109.1-81.1 55.1 0 110.8 21.9 110.8 55.4 0 16.9-11.4 31.8-30.3 31.8-28.3 0-29.2-33.5-75-33.5-25.7 0-42 7-42 22.5 0 19.8 20.8 21.8 69.1 33 41.4 9.3 90.7 26.8 90.7 77.6 0 59.1-57.1 86.5-112 86.5z"
+                                />
+                              </svg>
+                              <span class="ml-2">Skype</span>
+                            </div>
+                          </div>
+                          <!-- Google Meet -->
+                          <div
+                            class="flex flex-66.66% p-2"
+                            @click="addVideoMeetingAddon('google-meet')"
+                          >
+                            <div
+                              class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
+                            >
+                              <svg
+                                fill="#000000"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 50 50"
+                                width="16"
+                                height="16"
+                              >
+                                <path
+                                  d="M2 18L2 32 12 32 12 18zM39 9v4.31l-10 9V16H14V6h22C37.66 6 39 7.34 39 9zM29 27.69l10 9V41c0 1.66-1.34 3-3 3H14V34h15V27.69zM12 34v10H5c-1.657 0-3-1.343-3-3v-7H12zM12 6L12 16 2 16zM29 25L39 16 39 34zM49 9.25v31.5c0 .87-1.03 1.33-1.67.75L41 35.8V14.2l6.33-5.7C47.97 7.92 49 8.38 49 9.25z"
+                                />
+                              </svg>
+                              <span class="ml-2">Google Meet</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Button URL -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="w-[35%]">
+                            <span>Button Url</span>
+                          </div>
+                          <div class="w-[65%] pl-1">
                             <input
                               type="text"
-                              :placeholder="getUrl(social.name)"
-                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4"
-                              :class="defaultTransition"
-                              v-model="social.url"
-                            />
-                          </div>
-                          <div
-                            class="flex items-center justify-center absolute right-[-16px] top-3 cursor-pointer"
-                            @click="deleteSocialAddon(social.id)"
-                          >
-                            <svg
-                              height="16"
-                              width="16"
-                              fill="currentColor"
-                              clip-rule="evenodd"
-                              fill-rule="evenodd"
-                              stroke-linejoin="round"
-                              stroke-miterlimit="2"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="icons my-6">
-                        <div class="flex flex-wrap">
-                          <div
-                            class="max-w-[33.3333%] p-1 cursor-pointer"
-                            v-for="icon in addonsSocial"
-                            :key="icon.id"
-                            @click="addSocialAddon(icon.name)"
-                          >
-                            <img
-                              :src="
-                                '/icons/addons/' + icon.name + '_1' + '.png'
-                              "
-                              class="w-full"
-                              alt=""
+                              placeholder="Button url goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.videoMeeting.items.url"
                             />
                           </div>
                         </div>
-                      </div>
-                      <div class="styles my-5">
+                        <!-- Button Text -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="w-[35%]">
+                            <span>Button Text</span>
+                          </div>
+                          <div class="w-[65%] pl-1">
+                            <input
+                              type="text"
+                              placeholder="Button text goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.videoMeeting.items.text"
+                            />
+                          </div>
+                        </div>
+
                         <!-- Height -->
-                        <div class="mb-2">
+                        <div class="mt-6 mb-2">
                           <div class="flex items-center justify-between">
                             <span>Height</span>
-                            <span>{{ data.addons.social.style.height }}px</span>
+                            <span
+                              >{{
+                                data.addons.videoMeeting.style.height
+                              }}px</span
+                            >
                           </div>
                           <input
                             type="range"
                             class=""
                             min="20"
                             max="50"
-                            v-model="data.addons.social.style.height"
+                            v-model="data.addons.videoMeeting.style.height"
                           />
                         </div>
                         <!-- Padding Top -->
@@ -620,7 +1049,9 @@ const isObjEmpty = (obj) => {
                           <div class="flex items-center justify-between">
                             <span>Padding-Top</span>
                             <span
-                              >{{ data.addons.social.style.paddingTop }}px</span
+                              >{{
+                                data.addons.videoMeeting.style.paddingTop
+                              }}px</span
                             >
                           </div>
                           <input
@@ -628,330 +1059,167 @@ const isObjEmpty = (obj) => {
                             class=""
                             min="5"
                             max="20"
-                            v-model="data.addons.social.style.paddingTop"
+                            v-model="data.addons.videoMeeting.style.paddingTop"
                           />
                         </div>
                       </div>
-                    </div>
-                    <div
-                      class="flex items-center justify-center absolute right-[-14px] top-3 cursor-pointer"
-                      @click="deleteAddons('social')"
-                    >
-                      <svg
-                        height="16"
-                        width="16"
-                        fill="currentColor"
-                        clip-rule="evenodd"
-                        fill-rule="evenodd"
-                        stroke-linejoin="round"
-                        stroke-miterlimit="2"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <!-- Video Meeting -->
-                  <div
-                    class="mb-12 rounded-3xl shadow-xl border relative"
-                    v-if="data.addons.videoMeeting.isAdded"
-                  >
-                    <div class="accordion flex items-center py-4 px-5 border-b">
-                      <svg
-                        width="24"
-                        height="24"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                      >
-                        <path
-                          d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
-                        />
-                      </svg>
-                      <span class="ml-3">Video Meeting</span>
-                    </div>
-                    <div class="content py-7 px-5">
-                      <div class="flex flex-wrap">
-                        <!-- Zoom -->
-                        <div
-                          class="flex flex-50% p-2"
-                          @click="addVideoMeetingAddon('zoom')"
-                        >
-                          <div
-                            class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                d="M16 18c0 1.104-.896 2-2 2h-12c-1.105 0-2-.896-2-2v-12c0-1.104.895-2 2-2h12c1.104 0 2 .896 2 2v12zm8-14l-6 6.223v3.554l6 6.223v-16z"
-                              />
-                            </svg>
-                            <span class="ml-2">Zoom</span>
-                          </div>
-                        </div>
-                        <!-- Skype -->
-                        <div
-                          class="flex flex-50% p-2"
-                          @click="addVideoMeetingAddon('skype')"
-                        >
-                          <div
-                            class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 448 512"
-                              width="16"
-                              height="16"
-                            >
-                              <path
-                                d="M424.7 299.8c2.9-14 4.7-28.9 4.7-43.8 0-113.5-91.9-205.3-205.3-205.3-14.9 0-29.7 1.7-43.8 4.7C161.3 40.7 137.7 32 112 32 50.2 32 0 82.2 0 144c0 25.7 8.7 49.3 23.3 68.2-2.9 14-4.7 28.9-4.7 43.8 0 113.5 91.9 205.3 205.3 205.3 14.9 0 29.7-1.7 43.8-4.7 19 14.6 42.6 23.3 68.2 23.3 61.8 0 112-50.2 112-112 .1-25.6-8.6-49.2-23.2-68.1zm-194.6 91.5c-65.6 0-120.5-29.2-120.5-65 0-16 9-30.6 29.5-30.6 31.2 0 34.1 44.9 88.1 44.9 25.7 0 42.3-11.4 42.3-26.3 0-18.7-16-21.6-42-28-62.5-15.4-117.8-22-117.8-87.2 0-59.2 58.6-81.1 109.1-81.1 55.1 0 110.8 21.9 110.8 55.4 0 16.9-11.4 31.8-30.3 31.8-28.3 0-29.2-33.5-75-33.5-25.7 0-42 7-42 22.5 0 19.8 20.8 21.8 69.1 33 41.4 9.3 90.7 26.8 90.7 77.6 0 59.1-57.1 86.5-112 86.5z"
-                              />
-                            </svg>
-                            <span class="ml-2">Skype</span>
-                          </div>
-                        </div>
-                        <!-- Google Meet -->
-                        <div
-                          class="flex flex-66.66% p-2"
-                          @click="addVideoMeetingAddon('google-meet')"
-                        >
-                          <div
-                            class="w-full flex items-center border py-2 px-3 rounded-3xl cursor-pointer"
-                          >
-                            <svg
-                              fill="#000000"
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 50 50"
-                              width="16"
-                              height="16"
-                            >
-                              <path
-                                d="M2 18L2 32 12 32 12 18zM39 9v4.31l-10 9V16H14V6h22C37.66 6 39 7.34 39 9zM29 27.69l10 9V41c0 1.66-1.34 3-3 3H14V34h15V27.69zM12 34v10H5c-1.657 0-3-1.343-3-3v-7H12zM12 6L12 16 2 16zM29 25L39 16 39 34zM49 9.25v31.5c0 .87-1.03 1.33-1.67.75L41 35.8V14.2l6.33-5.7C47.97 7.92 49 8.38 49 9.25z"
-                              />
-                            </svg>
-                            <span class="ml-2">Google Meet</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <!-- Button URL -->
-                      <div class="flex items-center justify-between mt-4">
-                        <div class="w-[35%]">
-                          <span>Button Url</span>
-                        </div>
-                        <div class="w-[65%] pl-1">
-                          <input
-                            type="text"
-                            placeholder="Button url goes here"
-                            class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
-                            v-model="data.addons.videoMeeting.items.url"
-                          />
-                        </div>
-                      </div>
-                      <!-- Button Text -->
-                      <div class="flex items-center justify-between mt-4">
-                        <div class="w-[35%]">
-                          <span>Button Text</span>
-                        </div>
-                        <div class="w-[65%] pl-1">
-                          <input
-                            type="text"
-                            placeholder="Button text goes here"
-                            class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
-                            v-model="data.addons.videoMeeting.items.text"
-                          />
-                        </div>
-                      </div>
-
-                      <!-- Height -->
-                      <div class="mt-6 mb-2">
-                        <div class="flex items-center justify-between">
-                          <span>Height</span>
-                          <span
-                            >{{ data.addons.videoMeeting.style.height }}px</span
-                          >
-                        </div>
-                        <input
-                          type="range"
-                          class=""
-                          min="20"
-                          max="50"
-                          v-model="data.addons.videoMeeting.style.height"
-                        />
-                      </div>
-                      <!-- Padding Top -->
-                      <div class="mb-2">
-                        <div class="flex items-center justify-between">
-                          <span>Padding-Top</span>
-                          <span
-                            >{{
-                              data.addons.videoMeeting.style.paddingTop
-                            }}px</span
-                          >
-                        </div>
-                        <input
-                          type="range"
-                          class=""
-                          min="5"
-                          max="20"
-                          v-model="data.addons.videoMeeting.style.paddingTop"
-                        />
-                      </div>
-                    </div>
-                    <!-- Close Button -->
-                    <div
-                      class="flex items-center justify-center absolute right-[-15px] top-3 cursor-pointer"
-                      @click="deleteAddons('videoMeeting')"
-                    >
-                      <svg
-                        height="16"
-                        width="16"
-                        fill="currentColor"
-                        clip-rule="evenodd"
-                        fill-rule="evenodd"
-                        stroke-linejoin="round"
-                        stroke-miterlimit="2"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
-                        />
-                      </svg>
                     </div>
                   </div>
                   <!-- CTA -->
                   <div
-                    class="mb-3 rounded-3xl shadow-xl border relative"
+                    class="mb-3 rounded-3xl shadow-lg border relative overflow-hidden"
                     v-if="data.addons.cta.isAdded"
                   >
-                    <div class="accordion flex items-center py-4 px-5 border-b">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          d="M13.333 6.805l4.213 7.297-13.256 3.223c-.572.133-1.068.333-1.492.604l-.227-.393c.525-.293.929-.675 1.227-.993l9.535-9.738zm.332-2.626l-11.011 11.244c-.616.66-1.164.977-1.857.977-.244 0-.507-.04-.797-.117l2.646 4.585c.258-1.094.814-1.708 2.006-1.985l15.348-3.732-6.335-10.972zm.31 13.951l-.467 2.118c-.094.378-.391.674-.77.771l-2.951.774c-.365.095-.754-.012-1.018-.28l-1.574-1.712 1.605-.395.646.77c.176.177.433.248.675.186l1.598-.425c.252-.064.449-.261.511-.512l.161-.906 1.584-.389zm8.719-11.267l-2.684 1.613-.756-1.262 2.686-1.612.754 1.261zm-4.396-1.161l-1.335-.616 1.342-2.914 1.335.617-1.342 2.913zm5.619 6.157l-3.202-.174.081-1.469 3.204.175-.083 1.468z"
-                        />
-                      </svg>
-                      <span class="ml-3">Call To Action</span>
-                    </div>
-                    <div class="content py-7 px-5">
-                      <!-- Button URL -->
-                      <div class="flex items-center justify-between mt-4">
-                        <div class="w-[35%]">
-                          <span>Button Url</span>
-                        </div>
-                        <div class="w-[65%] pl-1">
-                          <input
-                            type="text"
-                            placeholder="Button url goes here"
-                            class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
-                            v-model="data.addons.cta.item.url"
-                          />
-                        </div>
-                      </div>
-                      <!-- Button Text -->
-                      <div class="flex items-center justify-between mt-4">
-                        <div class="w-[35%]">
-                          <span>Button Text</span>
-                        </div>
-                        <div class="w-[65%] pl-1">
-                          <input
-                            type="text"
-                            placeholder="Button text goes here"
-                            class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
-                            v-model="data.addons.cta.item.text"
-                          />
-                        </div>
-                      </div>
-                      <!-- Padding Top -->
-                      <div class="mt-6 mb-2">
-                        <div class="flex items-center justify-between">
-                          <span>Padding-Top</span>
-                          <span>{{ data.addons.cta.style.paddingTop }}px</span>
-                        </div>
-                        <input
-                          type="range"
-                          class=""
-                          min="5"
-                          max="20"
-                          v-model="data.addons.cta.style.paddingTop"
-                        />
-                      </div>
-                      <!-- Button Color -->
-                      <div class="flex items-center mb-5">
-                        <span class="w-[40%]">Button Color</span>
-
-                        <div
-                          class="relative w-9 h-9 rounded-full bg-red-400 border"
-                          :style="{
-                            background: data.addons.cta.style.buttonColor,
-                          }"
-                        >
-                          <input
-                            type="color"
-                            class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
-                            v-model="data.addons.cta.style.buttonColor"
-                          />
-                        </div>
-                      </div>
-                      <!-- Text Color -->
-                      <div class="flex items-center mb-5">
-                        <span class="w-[40%]">Text Color</span>
-
-                        <div
-                          class="relative w-9 h-9 rounded-full bg-red-400 border"
-                          :style="{
-                            background: data.addons.cta.style.textColor,
-                          }"
-                        >
-                          <input
-                            type="color"
-                            class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
-                            v-model="data.addons.cta.style.textColor"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <!-- Close Button -->
                     <div
-                      class="flex items-center justify-center absolute right-[-15px] top-3 cursor-pointer"
-                      @click="deleteAddons('cta')"
+                      class="accordion flex items-center justify-between py-4 px-5 border-b"
+                      @click="showAddonDetail('cta')"
                     >
-                      <svg
-                        height="16"
-                        width="16"
-                        fill="currentColor"
-                        clip-rule="evenodd"
-                        fill-rule="evenodd"
-                        stroke-linejoin="round"
-                        stroke-miterlimit="2"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
+                      <div class="flex items-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M13.333 6.805l4.213 7.297-13.256 3.223c-.572.133-1.068.333-1.492.604l-.227-.393c.525-.293.929-.675 1.227-.993l9.535-9.738zm.332-2.626l-11.011 11.244c-.616.66-1.164.977-1.857.977-.244 0-.507-.04-.797-.117l2.646 4.585c.258-1.094.814-1.708 2.006-1.985l15.348-3.732-6.335-10.972zm.31 13.951l-.467 2.118c-.094.378-.391.674-.77.771l-2.951.774c-.365.095-.754-.012-1.018-.28l-1.574-1.712 1.605-.395.646.77c.176.177.433.248.675.186l1.598-.425c.252-.064.449-.261.511-.512l.161-.906 1.584-.389zm8.719-11.267l-2.684 1.613-.756-1.262 2.686-1.612.754 1.261zm-4.396-1.161l-1.335-.616 1.342-2.914 1.335.617-1.342 2.913zm5.619 6.157l-3.202-.174.081-1.469 3.204.175-.083 1.468z"
+                          />
+                        </svg>
+                        <span class="ml-3">Call To Action</span>
+                      </div>
+                      <!-- Close -->
+                      <div
+                        class="flex items-center justify-center cursor-pointer"
+                        @click="deleteAddons('cta')"
                       >
-                        <path
-                          d="m12 10.93 5.719-5.72c.146-.146.339-.219.531-.219.404 0 .75.324.75.749 0 .193-.073.385-.219.532l-5.72 5.719 5.719 5.719c.147.147.22.339.22.531 0 .427-.349.75-.75.75-.192 0-.385-.073-.531-.219l-5.719-5.719-5.719 5.719c-.146.146-.339.219-.531.219-.401 0-.75-.323-.75-.75 0-.192.073-.384.22-.531l5.719-5.719-5.72-5.719c-.146-.147-.219-.339-.219-.532 0-.425.346-.749.75-.749.192 0 .385.073.531.219z"
-                        />
-                      </svg>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                    <!-- Content -->
+                    <div
+                      class="overflow-hidden transition-all ease-in-out duration-300"
+                      :class="
+                        addonsDetailsVisibility.cta
+                          ? 'max-h-0'
+                          : 'max-h-[500px]'
+                      "
+                    >
+                      <div class="content py-7 px-5">
+                        <!-- Button URL -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="w-[35%]">
+                            <span>Button Url</span>
+                          </div>
+                          <div class="w-[65%] pl-1">
+                            <input
+                              type="text"
+                              placeholder="Button url goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.cta.item.url"
+                            />
+                          </div>
+                        </div>
+                        <!-- Button Text -->
+                        <div class="flex items-center justify-between mt-4">
+                          <div class="w-[35%]">
+                            <span>Button Text</span>
+                          </div>
+                          <div class="w-[65%] pl-1">
+                            <input
+                              type="text"
+                              placeholder="Button text goes here"
+                              class="text-sm w-full bg-canvas-color rounded-2xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4 transition-all ease-in-out duration-350"
+                              v-model="data.addons.cta.item.text"
+                            />
+                          </div>
+                        </div>
+                        <!-- Padding Top -->
+                        <div class="mt-6 mb-2">
+                          <div class="flex items-center justify-between">
+                            <span>Padding-Top</span>
+                            <span
+                              >{{ data.addons.cta.style.paddingTop }}px</span
+                            >
+                          </div>
+                          <input
+                            type="range"
+                            class=""
+                            min="5"
+                            max="20"
+                            v-model="data.addons.cta.style.paddingTop"
+                          />
+                        </div>
+                        <!-- Button Color -->
+                        <div class="flex items-center mb-5">
+                          <span class="w-[40%]">Button Color</span>
+
+                          <div
+                            class="relative w-9 h-9 rounded-full bg-red-400 border"
+                            :style="{
+                              background: data.addons.cta.style.buttonColor,
+                            }"
+                          >
+                            <input
+                              type="color"
+                              class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                              v-model="data.addons.cta.style.buttonColor"
+                            />
+                          </div>
+                        </div>
+                        <!-- Text Color -->
+                        <div class="flex items-center mb-5">
+                          <span class="w-[40%]">Text Color</span>
+
+                          <div
+                            class="relative w-9 h-9 rounded-full bg-red-400 border"
+                            :style="{
+                              background: data.addons.cta.style.textColor,
+                            }"
+                          >
+                            <input
+                              type="color"
+                              class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                              v-model="data.addons.cta.style.textColor"
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="available-addons pb-12">
                   <EditorHeadings :title="'Available Addons'" />
                   <div class="mb-2">
-                    <div class="mb-3" v-if="!data.addons.social.isAdded">
+                    <div class="mb-4" v-if="!data.addons.signoff.isAdded">
                       <div
-                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl border cursor-pointer"
+                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
+                        @click="addAddons('signoff')"
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M13.473 9.196c-.425-.439-.401-1.127.035-1.552l4.461-4.326c.218-.211.498-.318.775-.318.282 0 .563.11.776.331l-6.047 5.865zm-7.334 11.021c-.092.089-.139.208-.139.327 0 .25.204.456.456.456.114 0 .229-.042.317-.128l.749-.729-.633-.654-.75.728zm6.33-8.425l-2.564 2.485c-1.378 1.336-2.081 2.63-2.73 4.437l1.132 1.169c1.825-.593 3.14-1.255 4.518-2.591l2.563-2.486-2.919-3.014zm7.477-7.659l-6.604 6.405 3.326 3.434 6.604-6.403c.485-.469.728-1.093.728-1.718 0-2.088-2.53-3.196-4.054-1.718zm-19.946 16.867h4v-1h-4v1z"
+                          />
+                        </svg>
+                        <span class="ml-3">SignOff</span>
+                      </div>
+                    </div>
+                    <div class="mb-4" v-if="!data.addons.social.isAdded">
+                      <div
+                        class="accordion flex items-center py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
                         @click="addAddons('social')"
                       >
                         <svg
@@ -966,6 +1234,33 @@ const isObjEmpty = (obj) => {
                           />
                         </svg>
                         <span class="ml-3">Social</span>
+                      </div>
+                    </div>
+                    <div class="mb-4" v-if="!data.addons.videoMeeting.isAdded">
+                      <div
+                        class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
+                        @click="addAddons('videoMeeting')"
+                      >
+                        <div class="flex items-center">
+                          <svg
+                            width="24"
+                            height="24"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                          >
+                            <path
+                              d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
+                            />
+                          </svg>
+
+                          <span class="ml-3">Video Meeting</span>
+                        </div>
+                        <div
+                          class="relative bg-primary-color text-white font-semibold py-1 px-2 rounded-3xl"
+                        >
+                          PRO
+                        </div>
                       </div>
                     </div>
                     <div class="mb-3" v-if="!data.addons.cta.isAdded">
@@ -984,45 +1279,6 @@ const isObjEmpty = (obj) => {
                           />
                         </svg>
                         <span class="ml-3">Call To Action</span>
-                      </div>
-                    </div>
-                    <div class="mb-3" v-if="!data.addons.videoMeeting.isAdded">
-                      <div
-                        class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-xl border cursor-pointer"
-                        @click="addAddons('videoMeeting')"
-                      >
-                        <div class="flex items-center">
-                          <svg
-                            width="24"
-                            height="24"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                          >
-                            <path
-                              d="M15 3c1.104 0 2 .896 2 2v4l7-4v14l-7-4v4c0 1.104-.896 2-2 2h-13c-1.104 0-2-.896-2-2v-14c0-1.104.896-2 2-2h13zm0 17c.552 0 1-.448 1-1v-14c0-.551-.448-1-1-1h-13c-.551 0-1 .449-1 1v14c0 .552.449 1 1 1h13zm2-9.848v3.696l6 3.429v-10.554l-6 3.429z"
-                            />
-                          </svg>
-
-                          <span class="ml-3">Video Meeting</span>
-                        </div>
-                        <div class="relative">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              d="M18 10v-4c0-3.313-2.687-6-6-6s-6 2.687-6 6v4h-3v14h18v-14h-3zm-10 0v-4c0-2.206 1.794-4 4-4s4 1.794 4 4v4h-8z"
-                            />
-                          </svg>
-                          <div
-                            class="absolute top-[30px] right-[-60px] min-w-[220px] py-2 px-3 bg-canvas-color"
-                          >
-                            Upgrage to use PRO Features
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -1220,7 +1476,9 @@ const isObjEmpty = (obj) => {
       </aside>
       <main class="w-full h-screen justify-between flex flex-col">
         <div class="">
-          <div class="h-[45px] w-full bg-white shadow-lg border-b flex items-center px-6">
+          <div
+            class="h-[45px] w-full bg-white shadow-lg border-b flex items-center px-6"
+          >
             <nuxt-link to="/">
               <div class="home flex items-center">
                 <svg
@@ -1238,7 +1496,7 @@ const isObjEmpty = (obj) => {
             </nuxt-link>
           </div>
         </div>
-        <div class="relative overflow-y-auto">
+        <div class="relative overflow-y-auto px-5">
           <EditorPreview :data="data" />
         </div>
         <div class="">

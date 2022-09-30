@@ -5,21 +5,29 @@ const prop = defineProps(["data"]);
 <template>
   <table
     cellpadding="0"
-    style="
-      vertical-align: -webkit-baseline-middle;
-      font-family: Arial;
-      width: 500px;
-    "
+    style="vertical-align: -webkit-baseline-middle; width: 500px"
     :style="{
       color: data.design.layout.textColor,
       'font-size': data.design.layout.fontSize + 'px',
       'font-family': data.design.layout.fontFamily,
     }"
   >
+    <tr v-if="data.addons.signoff.isAdded">
+      <td
+      style="padding-bottom: 6px;"
+        :style="{
+          color: data.addons.signoff.style.color,
+          'font-size': data.addons.signoff.style.fontSize + 'px',
+          'font-family': data.addons.signoff.style.fontFamily,
+        }"
+      >
+        {{ data.addons.signoff.value }}
+      </td>
+    </tr>
     <tr>
       <td>
         <img
-          :src="data.image.imgSrc "
+          :src="data.image.imgSrc"
           alt=""
           style="display: inline-block"
           :style="{
@@ -64,7 +72,7 @@ const prop = defineProps(["data"]);
       </td>
     </tr>
     <tr v-if="data.socialInfo">
-      <td style="padding-top:5px;">
+      <td style="padding-top: 5px">
         <span
           v-for="social in data.socialInfo"
           :key="social.id"
@@ -78,7 +86,7 @@ const prop = defineProps(["data"]);
     </tr>
     <tr v-if="data.addons.videoMeeting.isAdded">
       <td
-        style="margin: 0.1px; width: 100%; font-size: 16px;"
+        style="margin: 0.1px; width: 100%; font-size: 16px"
         :style="{
           'padding-top': data.addons.videoMeeting.style.paddingTop + 'px',
         }"
@@ -124,7 +132,7 @@ const prop = defineProps(["data"]);
     </tr>
     <tr v-if="data.addons.cta.isAdded">
       <td
-        style=" width: 100%; text-align: center;"
+        style="width: 100%; text-align: center"
         :style="{
           'padding-top': data.addons.cta.style.paddingTop + 'px',
         }"
@@ -140,10 +148,13 @@ const prop = defineProps(["data"]);
               line-height: 36px;
               min-width: 100px;
             "
-            :style="{background: data.addons.cta.style.buttonColor, color: data.addons.cta.style.textColor}"
+            :style="{
+              background: data.addons.cta.style.buttonColor,
+              color: data.addons.cta.style.textColor,
+            }"
           >
-          {{data.addons.cta.item.text}}
-        </div>
+            {{ data.addons.cta.item.text }}
+          </div>
         </a>
       </td>
     </tr>

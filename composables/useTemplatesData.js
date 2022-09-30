@@ -51,7 +51,15 @@ export default () => {
           },
         ],
         addons: {
-          id: [],
+          signoff: {
+            isAdded: true,
+            value: "Best Regards,",
+            style: {
+              fontFamily: "Sans Serif",
+              templateColor: "#226ebf",
+              fontSize: "18",
+            },
+          },
           social: {
             isAdded: true,
             items: [
@@ -175,6 +183,15 @@ export default () => {
           },
         ],
         addons: {
+          signoff: {
+            isAdded: true,
+            value: "Best Regards,",
+            style: {
+              fontFamily: "Sans Serif",
+              color: "#226ebf",
+              fontSize: "18",
+            },
+          },
           social: {
             isAdded: true,
             items: [
@@ -225,7 +242,7 @@ export default () => {
             fontSize: "18",
             textColor: "#000000",
             templateColor: "#226ebf",
-            theme: 'Layout03'
+            theme: "Layout03",
           },
           image: {
             width: "143",
