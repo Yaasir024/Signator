@@ -63,6 +63,15 @@ const filteredSocialData = computed(() => {
 });
 
 /*  ADDONS SECTION */
+const addonsDetailsVisibility = reactive({
+  social: false,
+  videoMeeting: false,
+  cta: false
+})
+const showAddonDetail = (addon) => {
+  console.log(addonsDetailsVisibility[addon])
+}
+
 // Add addon
 const addAddons = (addon) => {
   data.addons[addon].isAdded = true;
@@ -135,12 +144,32 @@ const isObjEmpty = (obj) => {
 
 <template>
   <div class="h-screen bg-canvas-color overflow-hidden">
-    <Navbar />
+    <!-- <NavbarEditor /> -->
     <section class="h-full w-full flex" v-if="!isObjEmpty(data)">
       <aside class="sidebar static top-0 h-screen">
-        <div class="bg-white shadow-xl border h-full flex">
-          <div class="left h-full bg-slate-200 max-w-[74px] w-full">
+        <div class="bg-white shadow-xl border-r h-full flex">
+          <div class="left h-full bg-canvas-color max-w-[74px] w-full">
             <div class="w-full">
+              <!-- Social -->
+              <button
+                class="flex flex-col items-center justify-center h-[74px] w-full px-1 hover:text-gray-500 transition-all ease-in-out duration-400"
+                :class="currentEditorNav === 'general' ? 'bg-white' : ''"
+                @click="setNavValue('general')"
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                >
+                  <path
+                    d="M20 15h4.071v2h-4.071v4.071h-2v-4.071h-4.071v-2h4.071v-4.071h2v4.071zm-8 6h-12v-2h12v2zm0-4.024h-12v-2h12v2zm0-3.976h-12v-2h12v2zm12-4h-24v-2h24v2zm0-4h-24v-2h24v2z"
+                  />
+                </svg>
+                <span>General</span>
+              </button>
               <!-- Social -->
               <button
                 class="flex flex-col items-center justify-center h-[74px] w-full px-1 hover:text-gray-500 transition-all ease-in-out duration-400"
@@ -229,9 +258,9 @@ const isObjEmpty = (obj) => {
             </div>
           </div>
           <div class="editor-tools h-full w-[400px] overflow-y-auto">
-            <div class="px-4 pt-8 pb-12">
+            <div class="px-4 pt-8 pb-14">
               <!-- GENERAL -->
-              <div class="general" v-if="currentEditorNav === 'general'">
+              <div class="general pb-14" v-if="currentEditorNav === 'general'">
                 <div class="content max-w-[400px] mx-auto">
                   <!-- Image Secion -->
                   <div class="wrapper image-section flex items-end pb-3">
@@ -425,7 +454,7 @@ const isObjEmpty = (obj) => {
                 </div>
               </div>
               <!-- SOCIAL -->
-              <div class="social" v-if="currentEditorNav === 'social'">
+              <div class="social pb-14" v-if="currentEditorNav === 'social'">
                 <div class="my-3 mb-10" v-if="data.socialInfo.length >= 1">
                   <div
                     class="field flex items-center justify-between mt-4 px-2 relative"
@@ -485,14 +514,14 @@ const isObjEmpty = (obj) => {
                 </div>
               </div>
               <!-- ADDONS -->
-              <div class="addons" v-if="currentEditorNav === 'addons'">
+              <div class="addons pb-14" v-if="currentEditorNav === 'addons'">
                 <div class="border-b pb-7 mb-10" v-if="checkAddons()">
                   <EditorHeadings :title="'Added Addons'" />
                   <div
                     class="mb-12 rounded-3xl shadow-xl border relative"
                     v-if="data.addons.social.isAdded"
                   >
-                    <div class="accordion flex items-center py-4 px-5 border-b">
+                    <div class="accordion flex items-center py-4 px-5 border-b" @click="showAddonDetail('social')">
                       <svg
                         width="24"
                         height="24"
@@ -1000,7 +1029,7 @@ const isObjEmpty = (obj) => {
                 </div>
               </div>
               <!-- DESIGN -->
-              <div class="design" v-if="currentEditorNav === 'design'">
+              <div class="design pb-14" v-if="currentEditorNav === 'design'">
                 <!-- Layout -->
                 <div class="layout pb-7 border-b">
                   <EditorHeadings :title="'Layout'" />
@@ -1189,9 +1218,46 @@ const isObjEmpty = (obj) => {
           </div>
         </div>
       </aside>
-      <main class="w-full h-full px-4 overflow-y-auto">
-        <div class="flex h-full items-center justify-center">
-            <EditorPreview :data="data" />
+      <main class="w-full h-screen justify-between flex flex-col">
+        <div class="">
+          <div class="h-[45px] w-full bg-white shadow-lg border-b flex items-center px-6">
+            <nuxt-link to="/">
+              <div class="home flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 384 512"
+                  width="16"
+                  height="16"
+                >
+                  <path
+                    d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
+                  />
+                </svg>
+                <span class="ml-2 text-lg">Home</span>
+              </div>
+            </nuxt-link>
+          </div>
+        </div>
+        <div class="relative overflow-y-auto">
+          <EditorPreview :data="data" />
+        </div>
+        <div class="">
+          <div
+            class="h-[50px] w-full flex items-center justify-end px-6 bg-white shadow-2xl border-t"
+          >
+            <div class="cursor-pointer">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1.25 17c0 .69-.559 1.25-1.25 1.25-.689 0-1.25-.56-1.25-1.25s.561-1.25 1.25-1.25c.691 0 1.25.56 1.25 1.25zm1.393-9.998c-.608-.616-1.515-.955-2.551-.955-2.18 0-3.59 1.55-3.59 3.95h2.011c0-1.486.829-2.013 1.538-2.013.634 0 1.307.421 1.364 1.226.062.847-.39 1.277-.962 1.821-1.412 1.343-1.438 1.993-1.432 3.468h2.005c-.013-.664.03-1.203.935-2.178.677-.73 1.519-1.638 1.536-3.022.011-.924-.284-1.719-.854-2.297z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </main>
     </section>

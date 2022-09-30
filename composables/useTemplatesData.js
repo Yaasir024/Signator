@@ -8,7 +8,8 @@ export default () => {
       category: "professional",
       data: {
         image: {
-          imgSrc: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+          imgSrc:
+            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
           url: "",
         },
         name: "Yaasir Falana",
@@ -120,10 +121,122 @@ export default () => {
     },
     {
       id: "2",
-      name: "Lavendar Template",
-      slug: "lavendar-template",
+      name: "Riley West",
+      image: "riley-west",
       type: "free",
       category: "creative",
+      data: {
+        image: {
+          imgSrc:
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+          url: "",
+        },
+        name: "Riley West",
+        position: "",
+        department: "Photographer",
+        company: "pic.co",
+        contactInfo: [
+          {
+            id: "5d4cdu",
+            field: "Email",
+            value: "riley@signator.com",
+          },
+          {
+            id: "zud0r8",
+            field: "Phone",
+            value: "+123456789",
+          },
+          {
+            id: "zxx4bb",
+            field: "Website",
+            value: "riley.co",
+          },
+        ],
+        socialInfo: [
+          {
+            id: "18cbfe",
+            name: "facebook",
+            url: "https://signator.com/",
+          },
+          {
+            id: "8ern69",
+            name: "linkedin",
+            url: "https://signator.com/",
+          },
+          {
+            id: "dg4n18",
+            name: "instagram",
+            url: "https://signator.com/",
+          },
+          {
+            id: "e32n52",
+            name: "pinterest",
+            url: "https://signator.com/",
+          },
+        ],
+        addons: {
+          social: {
+            isAdded: true,
+            items: [
+              {
+                id: "b04d82",
+                name: "youtube",
+                url: "https://signator.com/",
+              },
+              {
+                id: "723c18",
+                name: "vimeo",
+                url: "https://signator.com/",
+              },
+            ],
+            style: {
+              height: "37",
+              paddingTop: "12",
+            },
+          },
+          videoMeeting: {
+            isAdded: false,
+            items: {
+              name: "google-meet",
+              text: "Meet me on Google Meet",
+              url: "",
+            },
+            style: {
+              height: 22,
+              paddingTop: 10,
+            },
+          },
+          cta: {
+            isAdded: false,
+            item: {
+              text: "",
+              url: "",
+            },
+            style: {
+              paddingTop: 10,
+              textColor: "#ffffff",
+              buttonColor: "#1A0E71",
+            },
+          },
+        },
+        design: {
+          layout: {
+            fontFamily: "Sans Serif",
+            fontSize: "18",
+            textColor: "#000000",
+            templateColor: "#226ebf",
+            theme: 'Layout03'
+          },
+          image: {
+            width: "143",
+            roundness: "0",
+          },
+          socialIcon: {
+            size: "28",
+            roundness: "50",
+          },
+        },
+      },
     },
     {
       id: "3",
