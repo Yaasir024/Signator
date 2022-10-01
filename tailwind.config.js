@@ -26,7 +26,7 @@ module.exports = {
       },
       colors: {
         "canvas-color": "#f3f2ef",
-        "primary-color": "#0000ff",
+        "primary-color": "#87ceeb",
         "secondary-color": "#3f5375",
       },
       flex: {
