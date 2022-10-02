@@ -1,4 +1,10 @@
 <script setup>
+import {
+  useRefHistory,
+  useDebouncedRefHistory,
+  useLocalStorage,
+  useStorage,
+} from "@vueuse/core";
 const { templates } = useTemplatesData();
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
 const { uid } = useGenerateUid();
@@ -7,21 +13,19 @@ const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const route = useRoute();
 const name = route.params.name;
 
-const data = reactive({});
+// const data = reactive({});
 
-onMounted(() => {
-  Object.assign(data, JSON.parse(localStorage.getItem(name)));
+// onMounted(() => {
+//   Object.assign(data, JSON.parse(localStorage.getItem(name)));
+// });
+
+// localStorage.setItem('store', '{"hello": "hello"}')
+const data = useLocalStorage(`${name}`, {});
+const { history, undo, redo } = useDebouncedRefHistory(data, {
+  deep: true,
+  capacity: 15,
+  debounce: 2000,
 });
-
-// Cropper
-const cropImg = ref(null);
-
-const imageModal = ref(false);
-const toggleImageModal = () => {
-  getImageData()
-  imageModal.value = !imageModal.value;
-};
-const imageModalPath = ref("upload");
 
 // Change Editor Route
 const currentEditorNav = ref("general");
@@ -32,7 +36,7 @@ const setNavValue = (value) => {
 /*  GENERAL SECTION */
 // Add New Contact Item
 const addNewContactItem = () => {
-  data.contactInfo.push({
+  data.value.contactInfo.push({
     id: uid(6),
     field: "",
     value: "",
@@ -40,14 +44,16 @@ const addNewContactItem = () => {
 };
 // Delete Contact Item
 const deleteContactItem = (id) => {
-  data.contactInfo = data.contactInfo.filter((item) => item.id != id);
+  data.value.contactInfo = data.value.contactInfo.filter(
+    (item) => item.id != id
+  );
 };
 
 /*  SOCIAL SECTION */
 // Add New Social Item
 const addNewSocialItem = (social) => {
-  if (!data.socialInfo.some((e) => e.name === social)) {
-    data.socialInfo.push({
+  if (!data.value.socialInfo.some((e) => e.name === social)) {
+    data.value.socialInfo.push({
       id: uid(6),
       name: social,
       url: "",
@@ -57,7 +63,7 @@ const addNewSocialItem = (social) => {
 };
 // Delete Social Item
 const deleteSocialItem = (id) => {
-  data.socialInfo = data.socialInfo.filter((item) => item.id != id);
+  data.value.socialInfo = data.value.socialInfo.filter((item) => item.id != id);
 };
 const socialSearchQuery = ref("");
 // FILTERED SOCIAL MEDIA
@@ -87,22 +93,22 @@ const showAddonDetail = (addon) => {
 
 // Add addon
 const addAddons = (addon) => {
-  data.addons[addon].isAdded = true;
+  data.value.addons[addon].isAdded = true;
 
-  console.log(data.addons);
+  console.log(data.value.addons);
 };
 // Delete Addon
 const deleteAddons = (addon) => {
-  data.addons[addon].isAdded = false;
+  data.value.addons[addon].isAdded = false;
 
-  console.log(data.addons);
+  console.log(data.value.addons);
 };
 //check addon
 const checkAddons = () => {
   return (
-    data.addons.social.isAdded ||
-    data.addons.videoMeeting.isAdded ||
-    data.addons.cta.isAdded
+    data.value.addons.social.isAdded ||
+    data.value.addons.videoMeeting.isAdded ||
+    data.value.addons.cta.isAdded
   );
 };
 
@@ -115,7 +121,7 @@ const toggleSignoffFontMenu = () => {
 };
 // Set Font
 const setSignoffFont = (font) => {
-  data.addons.signoff.style.fontFamily = font;
+  data.value.addons.signoff.style.fontFamily = font;
   signoffFontMenu.value = false;
 };
 // FontMenu On Click Outside
@@ -127,8 +133,8 @@ useClickOutside(signoffFontMenuBar, () => {
 /*  SOCIAL ADDON  */
 // Add Social Addon
 const addSocialAddon = (social) => {
-  if (!data.addons.social.items.some((e) => e.name === social)) {
-    data.addons.social.items.push({
+  if (!data.value.addons.social.items.some((e) => e.name === social)) {
+    data.value.addons.social.items.push({
       id: uid(6),
       name: social,
       url: "",
@@ -137,14 +143,14 @@ const addSocialAddon = (social) => {
 };
 // Delete Social Addon
 const deleteSocialAddon = (id) => {
-  data.addons.social.items = data.addons.social.items.filter(
+  data.value.addons.social.items = data.value.addons.social.items.filter(
     (item) => item.id != id
   );
 };
 /* VIDEO MEETING ADDON */
 // Add video meeting
 const addVideoMeetingAddon = (name) => {
-  data.addons.videoMeeting.items.name = name;
+  data.value.addons.videoMeeting.items.name = name;
 };
 
 /* DESIGN SECTION */
@@ -156,7 +162,7 @@ const toggleFontMenu = () => {
 };
 // Set Font
 const setFont = (font) => {
-  data.design.layout.fontFamily = font;
+  data.value.design.layout.fontFamily = font;
   fontMenu.value = false;
 };
 // FontMenu On Click Outside
@@ -165,80 +171,34 @@ useClickOutside(fontMenuBar, () => {
   fontMenu.value = false;
 });
 
+const imageModal = ref(false);
+const toggleImageModal = () => {
+  imageModal.value = !imageModal.value;
+};
+
+const previewImage = ref("");
 // Add image
-const previewImage = (event) => {
+const readImage = (event) => {
   let input = event.target;
   let image = input.files[0];
   if (input.files) {
     let reader = new FileReader();
     reader.onload = (e) => {
-      data.image.imgSrc = e.target.result;
+      previewImage.value = e.target.result;
     };
     reader.readAsDataURL(input.files[0]);
   }
+  imageModal.value = true;
   console.log(image);
+};
+const setImage = () => {
+  data.value.image.imgSrc = previewImage.value;
+  imageModal.value = false;
 };
 // Remove Image
 const clearImage = () => {
-  data.image.imgSrc = "";
+  data.value.image.imgSrc = "";
 };
-
-const imageLibrary = ref([{
-    id: "08edrb",
-    imgSrc: "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-    imgName: "Anos.jpeg",
-    imgSize: 31809,
-    dateCreated: "Saturday, October 1, 2022",
-    timeCreated: "8:48:38 PM"
-}]);
-onMounted(() => {
-  
-  console.log('Mounted')
-})
-const getImgData = (event) => {
-  let input = event.target;
-  let image = input.files[0];
-  let imgData = {
-    id: uid(6),
-    imgSrc: "",
-    imgName: image.name,
-    imgSize: image.size,
-    dateCreated: getDate(),
-    timeCreated: getTime(),
-  };
-
-  if (input.files) {
-    let reader = new FileReader();
-    reader.onload = (e) => {
-      imgData.imgSrc = e.target.result;
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-  updateImgData(imgData);
-  // console.log(input.files[0])
-};
-const updateImgData = (data) => {
-  console.log(data);
-  imageLibrary.value.push(data);
-  // setTimeout(() => {
-  //   setLibraryData(imageLibrary.value);
-  //   imageModalPath.value = 'library'
-  // }, 500);
-};
-
-const setLibraryData = (data) => {
-  console.log(imageLibrary.value);
-  localStorage.setItem("imagesLibrary", JSON.stringify(data));
-};
-const getImageData = () => {
-  imageLibrary.value = JSON.parse(localStorage.getItem('imagesLibrary'));
-}
-const selectedImg = ref(null)
-const setImage = () => {
-  console.log(selectedImg.value)
-  data.image.imgSrc = selectedImg.value.imgSrc
-  imageModal.value = false
-}
 
 // To check if an Obj is Empty
 const isObjEmpty = (obj) => {
@@ -383,7 +343,6 @@ const isObjEmpty = (obj) => {
                         <div
                           class="relative flex flex-col items-center py-10 border border-dashed overflow-hidden cursor-pointer"
                           v-if="!data.image.imgSrc"
-                          @click="toggleImageModal()"
                         >
                           <div class="icon block">
                             <svg
@@ -400,6 +359,12 @@ const isObjEmpty = (obj) => {
                             </svg>
                           </div>
                           <span class="inline-block mt-2">Choose Image</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            @change="readImage"
+                            class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
+                          />
                         </div>
                         <img
                           :src="data.image.imgSrc"
@@ -1635,6 +1600,38 @@ const isObjEmpty = (obj) => {
                   <span class="ml-2 text-lg">Home</span>
                 </div>
               </nuxt-link>
+              <div class="controls ml-4 flex items-center">
+                <div class="undo cursor-pointer" title="Undo" @click="undo">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 0c-3.31 0-6.291 1.353-8.459 3.522l-2.48-2.48-1.061 7.341 7.437-.966-2.489-2.488c1.808-1.808 4.299-2.929 7.052-2.929 5.514 0 10 4.486 10 10s-4.486 10-10 10c-3.872 0-7.229-2.216-8.89-5.443l-1.717 1.046c2.012 3.803 6.005 6.397 10.607 6.397 6.627 0 12-5.373 12-12s-5.373-12-12-12z"
+                    />
+                  </svg>
+                </div>
+                <div
+                  class="redo ml-2 cursor-pointer"
+                  title="Redo"
+                  @click="redo"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="18"
+                    height="18"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M12 0c3.31 0 6.291 1.353 8.459 3.522l2.48-2.48 1.061 7.341-7.437-.966 2.489-2.489c-1.808-1.807-4.299-2.928-7.052-2.928-5.514 0-10 4.486-10 10s4.486 10 10 10c3.872 0 7.229-2.216 8.89-5.443l1.717 1.046c-2.012 3.803-6.005 6.397-10.607 6.397-6.627 0-12-5.373-12-12s5.373-12 12-12z"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
           <div class="relative overflow-y-auto px-5">
@@ -1662,12 +1659,17 @@ const isObjEmpty = (obj) => {
       </section>
     </div>
     <div
-      class="modal fixed top-[40px] right-[40px] bottom-[40px] left-[40px] rounded-3xl shadow-2xl bg-canvas-color overflow-hidden z-40 flex flex-col"
+      class="image-modal fixed top-0 left-0 w-full h-full bg-[#ffffff83] backdrop-blur"
       v-if="imageModal"
     >
-      <div class="header pt-4 px-8 bg-white border-b">
-        <div class="flex items-center justify-between">
-          <h1 class="text-lg font-semibold">Select Image</h1>
+      <div
+        class="h-full w-full py-8 px-6 overflow-y-scroll flex items-center justify-center"
+      >
+        <div
+          class="bg-white m-auto pt-5 pb-10 px-6 rounded-3xl shadow-lg border relative"
+        >
+        <div class="flex items-center justify-between pb-4">
+          <h1 class="text-xl font-medium">Image Preview</h1>
           <div
             class="flex items-center cursor-pointer"
             @click="toggleImageModal()"
@@ -1684,95 +1686,33 @@ const isObjEmpty = (obj) => {
             </svg>
           </div>
         </div>
-        <div class="">
-          <button
-            class="py-2 px-3 transition-all ease-in-out duration-300"
-            @click="imageModalPath = 'library'"
-            :class="imageModalPath === 'library' ? 'bg-canvas-color' : ''"
-          >
-            Image Library
-          </button>
-          <button
-            class="py-2 px-3 transition-all ease-in-out duration-300"
-            @click="imageModalPath = 'upload'"
-            :class="imageModalPath === 'upload' ? 'bg-canvas-color' : ''"
-          >
-            Upload File
-          </button>
-        </div>
-      </div>
-      <div class="content h-full">
-        <div
-          class="selection-section h-full p-5"
-          v-if="imageModalPath == 'upload'"
-        >
-          <div class="flex items-center justify-center h-full">
-            <!-- v-if="!data.image.imgSrc" -->
-            <div class="image-select flex flex-col items-center relative">
-              <h1 class="text-2xl font-medium">Drop Image Here</h1>
-              <span class="text-xl mt-1">or</span>
-              <button class="py-1 px-2 border-2 flex items-center">
-                <div class="icon block">
-                  <svg
-                    width="24"
-                    height="24"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                  >
-                    <path
-                      d="M11.492 10.172l-2.5 3.064-.737-.677 3.737-4.559 3.753 4.585-.753.665-2.5-3.076v7.826h-1v-7.828zm7.008 9.828h-13c-2.481 0-4.5-2.018-4.5-4.5 0-2.178 1.555-4.038 3.698-4.424l.779-.14.043-.789c.185-3.448 3.031-6.147 6.48-6.147 3.449 0 6.295 2.699 6.478 6.147l.044.789.78.14c2.142.386 3.698 2.246 3.698 4.424 0 2.482-2.019 4.5-4.5 4.5m.978-9.908c-.212-3.951-3.472-7.092-7.478-7.092s-7.267 3.141-7.479 7.092c-2.57.463-4.521 2.706-4.521 5.408 0 3.037 2.463 5.5 5.5 5.5h13c3.037 0 5.5-2.463 5.5-5.5 0-2.702-1.951-4.945-4.522-5.408"
-                    />
-                  </svg>
-                </div>
-                <span class="ml-2">Select File</span>
-              </button>
-              <input
-                type="file"
-                accept="image/*"
-                @change="getImgData"
-                class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
-              />
+          <div class="image-preview">
+            <div class="img" v-if="previewImage">
+              <img :src="previewImage" alt="" />
             </div>
-          </div>
-          <!-- <div class="flex items-center justify-center py-4 h-[90%]">
-            <div class="flex flex-col items-center h-full">
-              <div class="img-container max-h-[70%] h-full">
-                <img
-                  :src="data.image.imgSrc"
-                  ref="cropImg"
-                  class="w-full h-full"
+            <div class="controls flex items-center justify-between pt-12 pb-2">
+              <div
+                class="relative overflow-hidden py-1 px-3 bg-primary-color text-white text-lg rounded-3xl border-2 border-primary-color hover:text-primary-color hover:bg-white cursor-pointer transition-all ease-in-out duration-30"
+              >
+                Choose New Image
+                <input
+                  type="file"
+                  accept="image/*"
+                  @change="readImage"
+                  class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                 />
               </div>
-              <div class="controls max-h-[30%] h-full py-5 px-5">
-                I am A control
-              </div>
-            </div>
-          </div> -->
-        </div>
-        <div class="h-full" v-if="imageModalPath == 'library'">
-          <div class="h-full px-4 py-3 pb-[55px] overflow-y-auto">
-            <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 pb-20 max-w-[1290px] mx-auto">
-              <div
-                class="p-2 max-h-[160px]"
-                v-for="img in imageLibrary"
-                :key="img.id"
-              >
-                <div class="w-full h-full border-2 overflow-hidden" @click="selectedImg = img" :class="selectedImg === img ? 'border-primary-color' : ''">
-                  <img
-                    :src="img.imgSrc"
-                    alt=""
-                    class="w-full h-full object-cover cursor-pointer hover:scale-105 transition-all ease-in-out duration-300"
-                  />
+              <div class="">
+                <div
+                  class="py-1 px-4 border-2 border-primary-color text-primary-color text-lg rounded-3xl hover:text-white hover:bg-primary-color cursor-pointer transition-all ease-in-out duration-300"
+                  @click="setImage"
+                >
+                  Use Image
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="h-[50px] bg-white w-full absolute bottom-0 px-8 flex items-center justify-end">
-        <button class="bg-primary-color text-white py-1 px-2 rounded-3xl" @click="setImage()">Set as Image</button>
       </div>
     </div>
   </div>

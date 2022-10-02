@@ -42,6 +42,7 @@ const user = ref("pro");
 </script>
 
 <template>
+  {{filteredTemplates}}
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
     <main class="px-8 pb-20">
