@@ -13,7 +13,7 @@ const prop = defineProps(["data"]);
       <div class="preview">
         <div class="sig-preview pt-7 px-9 mb-10">
           <!-- <Layouts01 :data="data" /> -->
-          <Layouts03 :data="data" />
+          <Layouts04 :data="data" />
         </div>
       </div>
     </div>
