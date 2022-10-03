@@ -214,7 +214,7 @@ let user = ref(true);
   <transition name="nav">
     <template v-if="showNav" ref="mobileNav">
       <nav
-        class="mobile-nav pb-10 bg-white shadow-lg border-l fixed top-0 right-0 w-[340px] h-screen z-50"
+        class="mobile-nav pb-10 bg-white shadow-lg border-l fixed top-0 right-0 w-[300px] h-screen z-50"
       >
         <div class="px-5 py-4 border-b flex items-center justify-between">
           <div class="flex items-center">
