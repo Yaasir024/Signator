@@ -33,7 +33,7 @@ useClickOutside(accountsMenu, () => {
   accountNav.value = false;
 });
 
-let user = ref(true);
+let user = ref(false);
 </script>
 
 <template>
@@ -50,6 +50,7 @@ let user = ref(true);
         Features
       </nuxt-link>
       <nuxt-link
+      to="/pricing"
         class="py-2 px-4 text-lg hover:text-primary-color transition-all duration-300 ease-in-out"
       >
         Pricing
@@ -259,6 +260,7 @@ let user = ref(true);
           </li>
           <li>
             <nuxt-link
+            to="/pricing"
               class="block py-2 text-lg hover:text-primary-color transition-all duration-300 ease-in-out"
             >
               Pricing
