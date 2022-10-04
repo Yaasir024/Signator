@@ -1,4 +1,5 @@
 <template>
+  <!-- https://codepen.io/iilhamriz/full/YzxrdBz -->
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
     <main class="py-20">

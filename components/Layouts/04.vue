@@ -44,8 +44,8 @@ const prop = defineProps(["data"]);
                 }"
               />
             </td>
-            <td style="padding-right: 6px">
-              <table cellspacing="0" cellpadding="0" border-0>
+            <td style="padding-right: 6px" valign="top">
+              <table cellspacing="0" cellpadding="0" border-0 vertical-align="top">
                 <tr>
                   <td
                   >

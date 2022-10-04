@@ -96,9 +96,9 @@ const user = ref("pro");
             :key="template.id"
           >
             <div
-              class="card p-5 bg-white shadow-lg rounded-xl relative cursor-pointer"
+              class="card p-5 max-h-[250px] h-full bg-white shadow-lg rounded-xl relative cursor-pointer"
             >
-              <img :src="'/images/templates/' + template.id + '.png'" alt="" />
+              <img :src="'/images/templates/' + template.imgSrc" alt="" class=""/>
               <div
                 class="overlay absolute w-full h-full top-0 left-0 flex items-center justify-center bg-[#ffffffb3] opacity-0 transition-all ease-in-out duration-350"
               >

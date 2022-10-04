@@ -2,52 +2,188 @@ export default () => {
   const templates = [
     {
       id: "1",
-      name: "Template by shueisha",
-      slug: "template-by-shueisha",
-      type: "free",
+      name: "Suizie West",
+      type: "pro",
       category: "professional",
+      imgSrc: "suizie-west.PNG",
       data: {
         image: {
           imgSrc:
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          url: "",
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
         },
-        name: "Yaasir Falana",
-        position: "Frontend",
-        department: "Software",
-        company: "Signator",
+        name: "Suizie West",
+        position: "Developer",
+        department: "",
+        company: "",
         contactInfo: [
           {
             id: "264r99",
             field: "Email",
-            value: "yope4ever@gmail.com",
+            value: "suiziew@signator.com",
           },
           {
             id: "7u4e31",
             field: "Phone",
-            value: "+2349169241584",
+            value: "+1234556778",
           },
         ],
         socialInfo: [
           {
             id: "1r8dxb",
             name: "linkedin",
-            url: "https://www.linkedin.com/in/yaasir-falana-a29962233/",
+            url: "https://linkedin.com/",
           },
           {
             id: "0be75d",
             name: "twitter",
-            url: "https://twitter.com/YaasirFalana",
+            url: "https://twitter.com/",
           },
           {
             id: "df4n18",
             name: "instagram",
-            url: "https://www.instagram.com/yaasirfalana/",
+            url: "https://www.instagram.com/",
           },
           {
             id: "e32n50",
             name: "github",
-            url: "https://github.com/Yaasir024",
+            url: "https://github.com/",
+          },
+        ],
+        addons: {
+          signoff: {
+            isAdded: true,
+            value: "Sincerely,",
+            style: {
+              fontFamily: "Sans Serif",
+              templateColor: "#226ebf",
+              fontSize: "30",
+            },
+          },
+          social: {
+            isAdded: true,
+            items: [
+              {
+                id: "725c18",
+                name: "twitter",
+                url: "https://twitter.com/",
+              },
+              {
+                id: "x443d0",
+                name: "linkedin",
+                url: "https://www.linkedin.com/in/",
+              },
+            ],
+            style: {
+              height: "33",
+              paddingTop: "10",
+            },
+          },
+          videoMeeting: {
+            isAdded: true,
+            items: {
+              name: "google-meet",
+              text: "Meet me on Google Meet",
+              url: "https://www.google.com/",
+            },
+            style: {
+              height: 21,
+              paddingTop: 10,
+            },
+          },
+          cta: {
+            isAdded: false,
+            item: {
+              text: "",
+              url: "",
+            },
+            style: {
+              paddingTop: 10,
+              textColor: "#ffffff",
+              buttonColor: "#1A0E71",
+            },
+          },
+          disclaimer: {
+            isAdded: false,
+            text: "",
+            style: {
+              width: 500,
+              fontSize: "small",
+              textColor: "#bac6d9",
+            },
+          },
+          greenMessage: {
+            isAdded: false,
+            items: {
+              text: "",
+              icon: "",
+            },
+            style: {
+              fontSize: "small",
+              textColor: "",
+            },
+          },
+        },
+        design: {
+          layout: {
+            fontFamily: "cursive",
+            fontSize: 17,
+            textColor: "#221b1b",
+            templateColor: "#985252",
+            layout: "Layout05",
+          },
+          image: {
+            width: 146,
+            roundness: 0,
+          },
+          socialIcon: {
+            size: 25,
+            roundness: 0,
+          },
+        },
+      },
+    },
+    {
+      id: "2",
+      name: "Jon Dnow",
+      type: "free",
+      category: "professional",
+      imgSrc: "jon-dnow.PNG",
+      data: {
+        image: {
+          imgSrc:
+            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+        },
+        name: "Jon Dnow",
+        position: "Documentarian",
+        department: "",
+        company: "",
+        contactInfo: [
+          {
+            id: "274ts9",
+            field: "Email",
+            value: "jondnow@signator.com",
+          },
+          {
+            id: "7u9e31",
+            field: "Phone",
+            value: "+1234534478",
+          },
+        ],
+        socialInfo: [
+          {
+            id: "0be75d",
+            name: "twitter",
+            url: "https://twitter.com/",
+          },
+          {
+            id: "df4n18",
+            name: "instagram",
+            url: "https://www.instagram.com/",
+          },
+          {
+            id: "e39n50",
+            name: "facebook",
+            url: "https://facebook.com/",
           },
         ],
         addons: {
@@ -57,158 +193,26 @@ export default () => {
             style: {
               fontFamily: "Sans Serif",
               templateColor: "#226ebf",
-              fontSize: "18",
+              fontSize: 30,
             },
           },
           social: {
             isAdded: true,
             items: [
-              {
-                id: "b04a82",
-                name: "instagram",
-                url: "https://www.instagram.com/yaasirfalana/",
-              },
               {
                 id: "725c18",
                 name: "twitter",
-                url: "https://twitter.com/YaasirFalana",
+                url: "https://twitter.com/",
               },
               {
-                id: "x443d0",
-                name: "linkedin",
-                url: "https://www.linkedin.com/in/yaasir-falana-a29962233/",
-              },
-            ],
-            style: {
-              height: "32",
-              paddingTop: "12",
-            },
-          },
-          videoMeeting: {
-            isAdded: true,
-            items: {
-              name: "google-meet",
-              text: "Meet me on Google Meet",
-              url: "https://www.instagram.com/yaasirfalana/",
-            },
-            style: {
-              height: 22,
-              paddingTop: 10,
-            },
-          },
-          cta: {
-            isAdded: false,
-            item: {
-              text: "",
-              url: "",
-            },
-            style: {
-              paddingTop: 10,
-              textColor: "#ffffff",
-              buttonColor: "#1A0E71",
-            },
-          },
-        },
-        design: {
-          layout: {
-            fontFamily: "cursive",
-            fontSize: "17",
-            textColor: "#141414",
-            templateColor: "#000000",
-          },
-          image: {
-            width: "100",
-            roundness: "50",
-          },
-          socialIcon: {
-            size: "28",
-            roundness: "25",
-          },
-        },
-      },
-    },
-    {
-      id: "2",
-      name: "Riley West",
-      image: "riley-west",
-      type: "free",
-      category: "creative",
-      data: {
-        image: {
-          imgSrc:
-            "https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
-          url: "",
-        },
-        name: "Riley West",
-        position: "",
-        department: "Photographer",
-        company: "pic.co",
-        contactInfo: [
-          {
-            id: "5d4cdu",
-            field: "Email",
-            value: "riley@signator.com",
-          },
-          {
-            id: "zud0r8",
-            field: "Phone",
-            value: "+123456789",
-          },
-          {
-            id: "zxx4bb",
-            field: "Website",
-            value: "riley.co",
-          },
-        ],
-        socialInfo: [
-          {
-            id: "18cbfe",
-            name: "facebook",
-            url: "https://signator.com/",
-          },
-          {
-            id: "8ern69",
-            name: "linkedin",
-            url: "https://signator.com/",
-          },
-          {
-            id: "dg4n18",
-            name: "instagram",
-            url: "https://signator.com/",
-          },
-          {
-            id: "e32n52",
-            name: "pinterest",
-            url: "https://signator.com/",
-          },
-        ],
-        addons: {
-          signoff: {
-            isAdded: true,
-            value: "Best Regards,",
-            style: {
-              fontFamily: "Sans Serif",
-              color: "#226ebf",
-              fontSize: "18",
-            },
-          },
-          social: {
-            isAdded: true,
-            items: [
-              {
-                id: "b04d82",
-                name: "youtube",
-                url: "https://signator.com/",
-              },
-              {
-                id: "723c18",
+                id: "x443s0",
                 name: "vimeo",
-                url: "https://signator.com/",
+                url: "https://www.vimeo.com/",
               },
             ],
             style: {
-              height: "37",
-              paddingTop: "12",
+              height: 40,
+              paddingTop: 5,
             },
           },
           videoMeeting: {
@@ -219,7 +223,7 @@ export default () => {
               url: "",
             },
             style: {
-              height: 22,
+              height: 21,
               paddingTop: 10,
             },
           },
@@ -235,95 +239,288 @@ export default () => {
               buttonColor: "#1A0E71",
             },
           },
+          disclaimer: {
+            isAdded: false,
+            text: "",
+            style: {
+              width: 500,
+              fontSize: "small",
+              textColor: "#bac6d9",
+            },
+          },
+          greenMessage: {
+            isAdded: false,
+            items: {
+              text: "",
+              icon: "",
+            },
+            style: {
+              fontSize: "small",
+              textColor: "",
+            },
+          },
         },
         design: {
           layout: {
-            fontFamily: "Sans Serif",
-            fontSize: "18",
-            textColor: "#000000",
-            templateColor: "#226ebf",
-            theme: "Layout03",
+            fontFamily: "Verdana",
+            fontSize: 17,
+            textColor: "#221b1b",
+            templateColor: "#3a214f",
+            layout: "Layout02",
           },
           image: {
-            width: "143",
-            roundness: "0",
+            width: 146,
+            roundness: 0,
           },
           socialIcon: {
-            size: "28",
-            roundness: "50",
+            size: 25,
+            roundness: 50,
           },
         },
       },
     },
     {
       id: "3",
-      name: "Template 03",
-      slug: "template-03",
-      type: "free",
-      category: "professional",
-    },
-    {
-      id: "4",
-      name: "Template four",
-      slug: "template-four",
-      type: "pro",
-      category: "creative",
-    },
-    {
-      id: "5",
-      name: "Template by raik",
-      slug: "template-by-raik",
+      name: "Aria Meaton",
       type: "pro",
       category: "professional",
+      imgSrc: "aria-meaton.PNG",
+      data: {
+        image: {
+          imgSrc:
+            "https://images.unsplash.com/photo-1599842057874-37393e9342df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+        },
+        name: "Aria Meaton",
+        position: "Blogger",
+        department: "",
+        company: "",
+        contactInfo: [
+          {
+            id: "274ts8",
+            field: "Email",
+            value: "meaton@signator.com",
+          },
+          {
+            id: "274ts8",
+            field: "Website",
+            value: "signator.co",
+          },
+          {
+            id: "7d9e31",
+            field: "Phone",
+            value: "+123456789",
+          },
+        ],
+        socialInfo: [
+          { id: "0be75d", name: "twitter", url: "https://twitter.com/" },
+          {
+            id: "df4n18",
+            name: "instagram",
+            url: "https://www.instagram.com/",
+          },
+          { id: "a8ae80", name: "pinterest", url: "https://pinterest.com/" },
+          { id: "4zbx1n", name: "discord", url: "https://discord.gg/" },
+          { id: "68x69r", name: "quora", url: "https://quora.com/" },
+        ],
+        addons: {
+          signoff: {
+            isAdded: false,
+            value: "Best Regards,",
+            style: {
+              fontFamily: "Sans Serif",
+              templateColor: "#226ebf",
+              fontSize: 30,
+            },
+          },
+          social: {
+            isAdded: false,
+            items: [],
+            style: {
+              height: 40,
+              paddingTop: 5,
+            },
+          },
+          videoMeeting: {
+            isAdded: false,
+            items: {
+              name: "google-meet",
+              text: "Meet me on Google Meet",
+              url: "",
+            },
+            style: {
+              height: 21,
+              paddingTop: 10,
+            },
+          },
+          cta: {
+            isAdded: true,
+            item: {
+              text: "Join My Blog Today",
+              url: "https://google.com/",
+            },
+            style: {
+              paddingTop: 10,
+              textColor: "#ffffff",
+              buttonColor: "#1A0E71",
+            },
+          },
+          disclaimer: {
+            isAdded: false,
+            text: "",
+            style: {
+              width: 500,
+              fontSize: "small",
+              textColor: "#bac6d9",
+            },
+          },
+          greenMessage: {
+            isAdded: false,
+            items: {
+              text: "",
+              icon: "",
+            },
+            style: {
+              fontSize: "small",
+              textColor: "",
+            },
+          },
+        },
+        design: {
+          layout: {
+            fontFamily: "Verdana",
+            fontSize: 17,
+            textColor: "#221b1b",
+            templateColor: "#3a214f",
+            layout: "Layout04",
+          },
+          image: {
+            width: 146,
+            roundness: 0,
+          },
+          socialIcon: {
+            size: 25,
+            roundness: 50,
+          },
+        },
+      },
     },
     {
-      id: "6",
-      name: "Yashiro",
-      slug: "yashiro",
-      type: "pro",
-      category: "creative",
-    },
-    {
-      id: "7",
-      name: "Vue Template",
-      slug: "vue-template",
+      id: "3",
+      name: "Carl Snow",
       type: "pro",
       category: "professional",
-    },
-    {
-      id: "8",
-      name: "Template 8",
-      slug: "template-8",
-      type: "pro",
-      category: "creative",
-    },
-    {
-      id: "9",
-      name: "Strawberry",
-      slug: "strawberry",
-      type: "pro",
-      category: "professional",
-    },
-    {
-      id: "10",
-      name: "Elegant Inside",
-      slug: "elegant-inside",
-      type: "pro",
-      category: "creative",
-    },
-    {
-      id: "11",
-      name: "channin",
-      slug: "channin",
-      type: "pro",
-      category: "professional",
-    },
-    {
-      id: "12",
-      name: "Template by wiki",
-      slug: "template-by-wiki",
-      type: "pro",
-      category: "creative",
+      imgSrc: "carl-snow.PNG",
+      data: {
+        image: {
+          imgSrc:
+            "https://images.unsplash.com/photo-1599842057874-37393e9342df?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
+        },
+        name: "Carl Snow",
+        position: "Content Writer",
+        department: "Product Department",
+        company: "Signator",
+        contactInfo: [
+          {
+            id: "385st8",
+            field: "Email",
+            value: "catlsnow@signator.com",
+          },
+          {
+            id: "6d2e31",
+            field: "Phone",
+            value: "+123456789",
+          },
+        ],
+        socialInfo: [
+          { id: "0be75d", name: "twitter", url: "https://twitter.com/" },
+          {
+            id: "df4n18",
+            name: "instagram",
+            url: "https://www.instagram.com/",
+          },
+          { id: "dnnb3c", name: "linkedin", url: "https://www.linkedin.com/" },
+        ],
+        addons: {
+          signoff: {
+            isAdded: false,
+            value: "Best Regards,",
+            style: {
+              fontFamily: "Sans Serif",
+              templateColor: "#226ebf",
+              fontSize: 30,
+            },
+          },
+          social: {
+            isAdded: false,
+            items: [],
+            style: {
+              height: 40,
+              paddingTop: 5,
+            },
+          },
+          videoMeeting: {
+            isAdded: false,
+            items: {
+              name: "google-meet",
+              text: "Meet me on Google Meet",
+              url: "",
+            },
+            style: {
+              height: 21,
+              paddingTop: 10,
+            },
+          },
+          cta: {
+            isAdded: false,
+            item: {
+              text: "",
+              url: "",
+            },
+            style: {
+              paddingTop: 10,
+              textColor: "#ffffff",
+              buttonColor: "#1A0E71",
+            },
+          },
+          disclaimer: {
+            isAdded: false,
+            text: "",
+            style: {
+              width: 500,
+              fontSize: "small",
+              textColor: "#bac6d9",
+            },
+          },
+          greenMessage: {
+            isAdded: false,
+            items: {
+              text: "",
+              icon: "",
+            },
+            style: {
+              fontSize: "small",
+              textColor: "",
+            },
+          },
+        },
+        design: {
+          layout: {
+            fontFamily: "Verdana",
+            fontSize: 17,
+            textColor: "#221b1b",
+            templateColor: "#3a214f",
+            layout: "Layout03",
+          },
+          image: {
+            width: 146,
+            roundness: 0,
+          },
+          socialIcon: {
+            size: 25,
+            roundness: 50,
+          },
+        },
+      },
     },
   ];
 
