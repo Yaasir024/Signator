@@ -12,7 +12,7 @@ const prop = defineProps(["data"]);
       'font-family': data.design.layout.fontFamily,
     }"
   >
-    <tr v-if="data.addons.signoff.isAdded">
+    <tr v-if="data.addons.signoff">
       <td
         style="padding-bottom: 6px"
         :style="{
@@ -108,7 +108,7 @@ const prop = defineProps(["data"]);
     </tr>
     <tr>
       <table cellspacing="0" cellpadding="0" border-0>
-        <tr v-if="data.addons.videoMeeting.isAdded">
+        <tr v-if="data.addons.videoMeeting">
           <td
             style="margin: 0.1px; width: 100%; font-size: 16px"
             :style="{
@@ -123,7 +123,7 @@ const prop = defineProps(["data"]);
             </a>
           </td>
         </tr>
-        <tr v-if="data.addons.social.isAdded">
+        <tr v-if="data.addons.social">
           <table cellspacing="0" cellpadding="0" border-0>
             <tr>
               <td
@@ -157,7 +157,7 @@ const prop = defineProps(["data"]);
             </tr>
           </table>
         </tr>
-        <tr v-if="data.addons.cta.isAdded">
+        <tr v-if="data.addons.cta">
           <td
             style="width: 100%; text-align: center"
             :style="{

@@ -12,7 +12,7 @@ const prop = defineProps(["data"]);
       'font-family': data.design.layout.fontFamily,
     }"
   >
-    <tr v-if="data.addons.signoff.isAdded">
+    <tr v-if="data.addons.signoff">
       <td
         style="padding-bottom: 6px"
         :style="{
@@ -25,81 +25,66 @@ const prop = defineProps(["data"]);
       </td>
     </tr>
     <tr>
-      <table cellpadding="0" style="border-collapse: collapse">
-        <tr valign="top">
-          <td>
-            <img
-              :src="data.image.imgSrc"
-              alt=""
-              style="display: inline-block"
-              :style="{
-                width: data.design.image.width + 'px',
-                borderRadius: data.design.image.roundness + '%',
-              }"
-            />
-          </td>
-          <td style="padding-left: 16px" valign="top">
-            <table cellpadding="0" style="border-collapse: collapse">
-              <tr>
-                <td style="padding-bottom: 4px">
-                  <h3>{{ data.name }}</h3>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding-bottom: 4px">
-                  <p>{{ data.position }}</p>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <p>
-                    <span v-if="data.department">{{ data.department }}</span>
-                    <span v-if="data.department && data.company"
-                      >&nbsp;|&nbsp;</span
-                    >
-                    <span v-if="data.company">{{ data.company }}</span>
-                  </p>
-                </td>
-              </tr>
-              <tr
-                height="25"
-                style="vertical-align: middle"
-                v-for="data in data.contactInfo"
-                :key="data.id"
-              >
-                <td>
-                  <span
-                    >{{ data.field }}<span v-if="data.field">:</span>
-                    {{ data.value }}</span
-                  >
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span
-                    v-for="social in data.socialInfo"
-                    :key="social.id"
-                    style="
-                      padding-right: 4px;
-                      padding-bottom: 4px;
-                      display: inline-block;
-                    "
-                  >
-                    <a :href="social.url" target="_blank">
-                      <IconSocial
-                        :icon="social.name"
-                        :data="data.design.socialIcon"
-                      />
-                    </a>
-                  </span>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
+      <td>
+        <img
+          :src="data.image.imgSrc"
+          alt=""
+          style="display: inline-block"
+          :style="{
+            width: data.design.image.width + 'px',
+            borderRadius: data.design.image.roundness + '%',
+          }"
+        />
+      </td>
     </tr>
-    <tr v-if="data.addons.videoMeeting.isAdded">
+    <tr>
+      <td
+        style="font-size: 125%; text-transform: uppercase"
+        :style="{ color: data.design.layout.templateColor }"
+      >
+        {{ data.name }}
+      </td>
+    </tr>
+    <tr v-if="data.position">
+      <td>
+        {{ data.position }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <p>
+          <span v-if="data.department">{{ data.department }}</span>
+          <span v-if="data.department && data.company">&nbsp;|&nbsp;</span>
+          <span v-if="data.company">{{ data.company }}</span>
+        </p>
+      </td>
+    </tr>
+    <tr
+      style="vertical-align: middle"
+      v-for="data in data.contactInfo"
+      :key="data.id"
+    >
+      <td>
+        <span
+          >{{ data.field }}<span v-if="data.field">:</span>
+          {{ data.value }}</span
+        >
+      </td>
+    </tr>
+    <tr v-if="data.socialInfo">
+      <td style="padding-top: 5px">
+        <span
+          v-for="social in data.socialInfo"
+          :key="social.id"
+          style="padding-right: 4px; padding-bottom: 4px; display: inline-block"
+        >
+          <a :href="social.url" target="_blank">
+            <IconSocial :icon="social.name" :data="data.design.socialIcon" />
+          </a>
+        </span>
+      </td>
+    </tr>
+    <tr v-if="data.addons.videoMeeting">
       <td
         style="margin: 0.1px; width: 100%; font-size: 16px"
         :style="{
@@ -114,11 +99,10 @@ const prop = defineProps(["data"]);
         </a>
       </td>
     </tr>
-    <tr v-if="data.addons.social.isAdded">
+    <tr v-if="data.addons.social">
       <table cellspacing="0" cellpadding="0" border-0>
         <tr>
           <td
-            style="margin: 0.1px"
             :style="{
               'padding-top': data.addons.social.style.paddingTop + 'px',
             }"
@@ -146,9 +130,9 @@ const prop = defineProps(["data"]);
         </tr>
       </table>
     </tr>
-    <tr v-if="data.addons.cta.isAdded">
+    <tr v-if="data.addons.cta">
       <td
-        style="margin: 0.1px; width: 100%"
+        style="width: 100%; text-align: center"
         :style="{
           'padding-top': data.addons.cta.style.paddingTop + 'px',
         }"
@@ -176,3 +160,5 @@ const prop = defineProps(["data"]);
     </tr>
   </table>
 </template>
+
+<!-- || '/images/placeholder-small.jpg' -->

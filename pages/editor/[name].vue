@@ -6,6 +6,12 @@ import {
   useStorage,
 } from "@vueuse/core";
 const { templates } = useTemplatesData();
+const {
+  defaultAddonData,
+  disclaimerData,
+  greenMessageData,
+  checkFeatureQualification,
+} = useAddonsData();
 const { defaultTransition, editorNavActive, editorNav } = useTailwindConfig();
 const { uid } = useGenerateUid();
 const { getTime, getDate } = useGetDateTime();
@@ -91,25 +97,36 @@ const showAddonDetail = (addon) => {
   addonsDetailsVisibility[addon] = !addonsDetailsVisibility[addon];
   console.log(addonsDetailsVisibility[addon]);
 };
-
 // Add addon
 const addAddons = (addon) => {
-  data.value.addons[addon].isAdded = true;
+  if(checkFeatureQualification(addon)) {
 
-  console.log(data.value.addons);
+    data.value.addons[addon] = defaultAddonData[addon];
+  }
 };
 // Delete Addon
 const deleteAddons = (addon) => {
-  data.value.addons[addon].isAdded = false;
-
-  console.log(data.value.addons);
+  delete data.value.addons[addon];
 };
 //check addon
-const checkAddons = () => {
+const checkAddedAddons = () => {
   return (
-    data.value.addons.social.isAdded ||
-    data.value.addons.videoMeeting.isAdded ||
-    data.value.addons.cta.isAdded
+    data.value.addons.signoff ||
+    data.value.addons.disclaimer ||
+    data.value.addons.social ||
+    data.value.addons.greenMessage ||
+    data.value.addons.videoMeeting ||
+    data.value.addons.cta
+  );
+};
+const checkAvailableAddons = () => {
+  return (
+    !data.value.addons.signoff ||
+    !data.value.addons.disclaimer ||
+    !data.value.addons.social ||
+    !data.value.addons.greenMessage ||
+    !data.value.addons.videoMeeting ||
+    !data.value.addons.cta
   );
 };
 
@@ -137,33 +154,34 @@ const disclaimerMenu = ref(false);
 const toggleDisclaimerMenu = () => {
   disclaimerMenu.value = !disclaimerMenu.value;
 };
-const disclaimer = ref("Confidentiality");
-// Set Font
+// Set
 const setDisclaimer = (value) => {
-  console.log(disclaimer.value);
-  disclaimer.value = value;
+  data.value.addons.disclaimer.type = value;
+  data.value.addons.disclaimer.text = disclaimerData[value];
+  console.log(disclaimerData[value]);
   disclaimerMenu.value = false;
 };
-// FontMenu On Click Outside
+// Type Menu On Click Outside
 const disclaimerMenuBar = ref(null);
 useClickOutside(disclaimerMenuBar, () => {
   disclaimerMenu.value = false;
 });
-// 
-// 
+//
+//
 // Disclaimer Font
-const disclaimerFontMenu = ref(false)
+const disclaimerFontMenu = ref(false);
 // Toggle Menu
 const toggleFontDisclaimerMenu = () => {
   disclaimerFontMenu.value = !disclaimerFontMenu.value;
 };
-// 
+//
 const setDisclaimerFont = (value) => {
+  data.value.addons.disclaimer.style.fontSize = value;
   console.log(value);
   disclaimerFontMenu.value = false;
 };
-// 
-const disclaimerFontMenuBar = ref(null)
+//
+const disclaimerFontMenuBar = ref(null);
 useClickOutside(disclaimerFontMenuBar, () => {
   disclaimerFontMenu.value = false;
 });
@@ -190,6 +208,42 @@ const deleteSocialAddon = (id) => {
 const addVideoMeetingAddon = (name) => {
   data.value.addons.videoMeeting.items.name = name;
 };
+
+/*  Green Message ADDON  */
+const greenMessageMenu = ref(false);
+// Toggle Menu
+const toggleGreenMessageMenu = () => {
+  greenMessageMenu.value = !greenMessageMenu.value;
+};
+// Set Message
+const setGreenMessage = (value) => {
+  data.value.addons.greenMessage.items.type = value;
+  data.value.addons.greenMessage.items.text = greenMessageData[value];
+  console.log(greenMessageData[value]);
+  greenMessageMenu.value = false;
+};
+// Menu On Click Outside
+const greenMessageMenuBar = ref(null);
+useClickOutside(greenMessageMenuBar, () => {
+  greenMessageMenu.value = false;
+});
+// Font
+const greenMessageFontMenu = ref(false);
+// Toggle Menu
+const toggleFontGreenMessageMenu = () => {
+  greenMessageFontMenu.value = !greenMessageFontMenu.value;
+};
+//
+const setGreenMessageFont = (value) => {
+  data.value.addons.greenMessage.style.fontSize = value;
+  console.log(value);
+  greenMessageFontMenu.value = false;
+};
+//
+const greenMessageFontMenuBar = ref(null);
+useClickOutside(greenMessageFontMenuBar, () => {
+  greenMessageFontMenu.value = false;
+});
 
 /* DESIGN SECTION */
 // Font Menu
@@ -236,6 +290,7 @@ const setImage = () => {
 // Remove Image
 const clearImage = () => {
   data.value.image.imgSrc = "";
+  console.log(defaultAddonData);
 };
 
 //
@@ -250,13 +305,15 @@ const isObjEmpty = (obj) => {
 </script>
 
 <template>
+  <!-- {{ defaultAddonData }} -->
   <!-- {{data}} -->
+  <!-- {{isObjEmpty(data.social.addons)}} -->
   <div class="" v-if="!isObjEmpty(data)">
     <div class="h-screen bg-canvas-color overflow-hidden">
       <!-- <NavbarEditor /> -->
       <section class="h-full w-full flex" v-if="!isObjEmpty(data)">
         <aside class="sidebar static top-0 h-screen">
-          <div class="bg-white shadow-xl border-r h-full flex">
+          <div class="w-[450px] bg-white shadow-xl border-r h-full flex">
             <div class="left h-full bg-canvas-color max-w-[74px] w-full">
               <div class="w-full">
                 <!-- General -->
@@ -366,7 +423,7 @@ const isObjEmpty = (obj) => {
                 </button>
               </div>
             </div>
-            <div class="editor-tools h-full w-[400px] overflow-y-auto">
+            <div class="editor-tools h-full w-full overflow-y-auto">
               <div class="px-4 pt-8 pb-14">
                 <!-- GENERAL -->
                 <div
@@ -623,12 +680,12 @@ const isObjEmpty = (obj) => {
                 <!-- v-if="checkAddons()" -->
                 <div class="addons pb-14" v-if="currentEditorNav === 'addons'">
                   <!-- Added -->
-                  <div class="border-b pb-7 mb-10">
+                  <div class="border-b pb-7 mb-10" v-if="checkAddedAddons()">
                     <EditorHeadings :title="'Added Addons'" />
                     <!-- Sign Off -->
                     <div
                       class="rounded-3xl shadow-lg border relative overflow-hidden"
-                      v-if="data.addons.signoff.isAdded"
+                      v-if="data.addons.signoff"
                       :class="
                         addonsDetailsVisibility.signoff ? 'mb-5' : 'mb-12'
                       "
@@ -831,7 +888,7 @@ const isObjEmpty = (obj) => {
                               <span class="w-[40%]">Text Color</span>
 
                               <div
-                                class="relative w-9 h-9 rounded-full"
+                                class="relative w-9 h-9 rounded-full border"
                                 :style="{
                                   background: data.addons.signoff.style.color,
                                 }"
@@ -866,9 +923,9 @@ const isObjEmpty = (obj) => {
                       </div>
                     </div>
                     <!-- Discalimer -->
-                    <!-- v-if="data.addons.signoff.isAdded" -->
                     <div
                       class="rounded-3xl shadow-lg border relative overflow-hidden"
+                      v-if="data.addons.disclaimer"
                       :class="
                         addonsDetailsVisibility.disclaimer ? 'mb-5' : 'mb-12'
                       "
@@ -893,7 +950,7 @@ const isObjEmpty = (obj) => {
                         </div>
                         <div
                           class="flex items-center justify-center cursor-pointer"
-                          @click="deleteAddons('signoff')"
+                          @click="deleteAddons('disclaimer')"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -927,10 +984,12 @@ const isObjEmpty = (obj) => {
                                 ref="disclaimerMenuBar"
                               >
                                 <div
-                                  class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
+                                  class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer capitalize"
                                   @click="toggleDisclaimerMenu()"
                                 >
-                                  {{ disclaimer }}
+                                  {{
+                                    data.addons.disclaimer.type || "Select Type"
+                                  }}
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="14"
@@ -948,7 +1007,7 @@ const isObjEmpty = (obj) => {
                                   >
                                     <div
                                       class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
-                                      @click="setDisclaimer('Confidentiality')"
+                                      @click="setDisclaimer('confidentiality')"
                                     >
                                       <span>Confidentiality</span>
                                     </div>
@@ -972,7 +1031,7 @@ const isObjEmpty = (obj) => {
                                     </div>
                                     <div
                                       class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
-                                      @click="setDisclaimer('Security')"
+                                      @click="setDisclaimer('security')"
                                     >
                                       <span>Security</span>
                                     </div>
@@ -980,7 +1039,12 @@ const isObjEmpty = (obj) => {
                                 </transition>
                               </div>
                             </div>
-                            <textarea maxlength="3000" rows="9" class="w-full border p-4 text-sm leading-4 bg-canvas-color rounded-2xl resize-none outline-none"></textarea>
+                            <textarea
+                              maxlength="3000"
+                              rows="9"
+                              v-model="data.addons.disclaimer.text"
+                              class="w-full border p-4 text-sm leading-4 bg-canvas-color rounded-2xl resize-none outline-none"
+                            ></textarea>
                           </div>
                           <div class="styles my-5">
                             <!-- Font Size -->
@@ -996,7 +1060,7 @@ const isObjEmpty = (obj) => {
                                   class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
                                   @click="toggleFontDisclaimerMenu()"
                                 >
-                                  {{ data.addons.signoff.style.fontFamily }}
+                                  {{ data.addons.disclaimer.style.fontSize }}
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="14"
@@ -1039,35 +1103,20 @@ const isObjEmpty = (obj) => {
                               <span class="w-[40%]">Text Color</span>
 
                               <div
-                                class="relative w-9 h-9 rounded-full"
+                                class="relative w-9 h-9 rounded-full border"
                                 :style="{
-                                  background: data.addons.signoff.style.color,
+                                  background:
+                                    data.addons.disclaimer.style.textColor,
                                 }"
                               >
                                 <input
                                   type="color"
                                   class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
-                                  v-model="data.addons.signoff.style.color"
+                                  v-model="
+                                    data.addons.disclaimer.style.textColor
+                                  "
                                 />
                               </div>
-                            </div>
-                            <!-- Font Size -->
-                            <div class="mb-5">
-                              <div class="flex items-center justify-between">
-                                <span>Font Size</span>
-                                <span
-                                  >{{
-                                    data.addons.signoff.style.fontSize
-                                  }}px</span
-                                >
-                              </div>
-                              <input
-                                type="range"
-                                class=""
-                                min="20"
-                                max="50"
-                                v-model="data.addons.signoff.style.fontSize"
-                              />
                             </div>
                           </div>
                         </div>
@@ -1076,7 +1125,7 @@ const isObjEmpty = (obj) => {
                     <!-- Social -->
                     <div
                       class="rounded-3xl shadow-lg border relative overflow-hidden"
-                      v-if="data.addons.social.isAdded"
+                      v-if="data.addons.social"
                       :class="addonsDetailsVisibility.social ? 'mb-5' : 'mb-12'"
                     >
                       <div
@@ -1228,10 +1277,305 @@ const isObjEmpty = (obj) => {
                         </div>
                       </div>
                     </div>
+                    <!-- Green Message -->
+                    <div
+                      class="rounded-3xl shadow-lg border relative overflow-hidden"
+                      v-if="data.addons.greenMessage"
+                      :class="
+                        addonsDetailsVisibility.greenMessage ? 'mb-5' : 'mb-12'
+                      "
+                    >
+                      <div
+                        class="accordion flex items-center justify-between py-4 px-5 border-b"
+                        @click="showAddonDetail('greenMessage')"
+                      >
+                        <div class="flex items-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M15.787 7.531c-5.107 2.785-12.72 9.177-15.787 15.469h2.939c.819-2.021 2.522-4.536 3.851-5.902 8.386 3.747 17.21-2.775 17.21-11.343 0-1.535-.302-3.136-.92-4.755-2.347 3.119-5.647 1.052-10.851 1.625-7.657.844-11.162 6.797-8.764 11.54 3.506-3.415 9.523-6.38 12.322-6.634z"
+                            />
+                          </svg>
+                          <span class="ml-3">Green Message</span>
+                        </div>
+                        <div
+                          class="flex items-center justify-center cursor-pointer"
+                          @click="deleteAddons('greenMessage')"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                      <div
+                        class="overflow-hidden transition-all ease-in-out duration-300"
+                        :class="
+                          addonsDetailsVisibility.greenMessage
+                            ? 'max-h-0'
+                            : 'max-h-[500px]'
+                        "
+                      >
+                        <div class="content py-7 px-5">
+                          <div class="">
+                            <!-- Green Message Type -->
+                            <div
+                              class="item flex items-center justify-between mb-5"
+                            >
+                              <label class="w-[35%]">Type</label>
+                              <div
+                                class="relative max-w-[65%] w-full"
+                                ref="greenMessageMenuBar"
+                              >
+                                <div
+                                  class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer capitalize"
+                                  @click="toggleGreenMessageMenu()"
+                                >
+                                  <span
+                                    v-if="data.addons.greenMessage.items.type"
+                                    >Green Message
+                                    {{
+                                      data.addons.greenMessage.items.type
+                                    }}</span
+                                  >
+                                  <span v-else>Choose </span>
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="14"
+                                    height="14"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M12 21l-12-18h24z" />
+                                  </svg>
+                                </div>
+                                <transition name="menu">
+                                  <div
+                                    class="absolute top-[45px] left-0 z-30 w-full bg-white shadow border rounded-b-2xl overflow-hidden"
+                                    v-if="greenMessageMenu"
+                                  >
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('1')"
+                                    >
+                                      <span>Green Message 1</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('2')"
+                                    >
+                                      <span>Green Message 2</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('3')"
+                                    >
+                                      <span>Green Message 3</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('4')"
+                                    >
+                                      <span>Green Message 4</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('5')"
+                                    >
+                                      <span>Green Message 5</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessage('6')"
+                                    >
+                                      <span>Green Message 6</span>
+                                    </div>
+                                  </div>
+                                </transition>
+                              </div>
+                            </div>
+                            <textarea
+                              maxlength="3000"
+                              rows="6"
+                              v-model="data.addons.greenMessage.items.text"
+                              class="w-full border p-4 text-sm leading-4 bg-canvas-color rounded-2xl resize-none outline-none"
+                            ></textarea>
+                            <!-- Icons -->
+                            <div class="flex flex-wrap py-4 px-2">
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = ''
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == ''
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img
+                                  src="/images/greenMessage/none.svg"
+                                  alt=""
+                                />
+                              </div>
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = '1.svg'
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == '1.svg'
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img src="/images/greenMessage/1.svg" alt="" />
+                              </div>
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = '2.svg'
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == '2.svg'
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img src="/images/greenMessage/2.svg" alt="" />
+                              </div>
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = '3.svg'
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == '3.svg'
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img src="/images/greenMessage/3.svg" alt="" />
+                              </div>
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = '4.svg'
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == '4.svg'
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img src="/images/greenMessage/4.svg" alt="" />
+                              </div>
+                              <div
+                                class="flex items-center justify-center m-1 w-[36px] h-[36px] border-2 rounded-lg cursor-pointer"
+                                @click="
+                                  data.addons.greenMessage.items.icon = '5.svg'
+                                "
+                                :class="
+                                  data.addons.greenMessage.items.icon == '5.svg'
+                                    ? 'border-primary-color'
+                                    : ''
+                                "
+                              >
+                                <img src="/images/greenMessage/5.svg" alt="" />
+                              </div>
+                              {{ data.addons.greenMessage.items.icon }}
+                            </div>
+                          </div>
+                          <div class="styles my-5">
+                            <!-- Font Size -->
+                            <div
+                              class="item flex items-center justify-between mb-5"
+                            >
+                              <label class="w-[35%]">Font Size</label>
+                              <div
+                                class="relative max-w-[65%] w-full"
+                                ref="greenMessageFontMenuBar"
+                              >
+                                <div
+                                  class="w-full bg-canvas-color flex items-center justify-between py-2 px-4 border rounded-2xl cursor-pointer"
+                                  @click="toggleFontGreenMessageMenu()"
+                                >
+                                  {{ data.addons.greenMessage.style.fontSize }}
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="14"
+                                    height="14"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                  >
+                                    <path d="M12 21l-12-18h24z" />
+                                  </svg>
+                                </div>
+                                <transition name="menu">
+                                  <div
+                                    class="absolute top-[45px] left-0 z-30 w-full bg-white shadow border rounded-b-2xl overflow-hidden"
+                                    v-if="greenMessageFontMenu"
+                                  >
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessageFont('Medium')"
+                                    >
+                                      <span>Medium</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessageFont('Small')"
+                                    >
+                                      <span>Small</span>
+                                    </div>
+                                    <div
+                                      class="py-1 px-4 border-b cursor-pointer hover:bg-canvas-color"
+                                      @click="setGreenMessageFont('X-small')"
+                                    >
+                                      <span>X-small</span>
+                                    </div>
+                                  </div>
+                                </transition>
+                              </div>
+                            </div>
+                            <!-- Text Color -->
+                            <div class="flex items-center mb-5">
+                              <span class="w-[40%]">Text Color</span>
+
+                              <div
+                                class="relative w-9 h-9 rounded-full border"
+                                :style="{
+                                  background:
+                                    data.addons.greenMessage.style.textColor,
+                                }"
+                              >
+                                <input
+                                  type="color"
+                                  class="absolute top-0 left-0 w-full h-full cursor-pointer opacity-0"
+                                  v-model="
+                                    data.addons.greenMessage.style.textColor
+                                  "
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <!-- Video Meeting -->
                     <div
                       class="rounded-3xl shadow-lg border relative overflow-hidden"
-                      v-if="data.addons.videoMeeting.isAdded"
+                      v-if="data.addons.videoMeeting"
                       :class="
                         addonsDetailsVisibility.videoMeeting ? 'mb-5' : 'mb-12'
                       "
@@ -1421,7 +1765,7 @@ const isObjEmpty = (obj) => {
                     <!-- CTA -->
                     <div
                       class="mb-3 rounded-3xl shadow-lg border relative overflow-hidden"
-                      v-if="data.addons.cta.isAdded"
+                      v-if="data.addons.cta"
                     >
                       <div
                         class="accordion flex items-center justify-between py-4 px-5 border-b"
@@ -1549,11 +1893,15 @@ const isObjEmpty = (obj) => {
                       </div>
                     </div>
                   </div>
-                  <div class="available-addons pb-12">
+                  <!-- Available -->
+                  <div
+                    class="available-addons pb-12"
+                    v-if="checkAvailableAddons()"
+                  >
                     <EditorHeadings :title="'Available Addons'" />
                     <div class="mb-2">
                       <!-- SignOff -->
-                      <div class="mb-4" v-if="!data.addons.signoff.isAdded">
+                      <div class="mb-4" v-if="!data.addons.signoff">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
                           @click="addAddons('signoff')"
@@ -1572,14 +1920,10 @@ const isObjEmpty = (obj) => {
                         </div>
                       </div>
                       <!-- Discalimer -->
-                      <!-- v-if="!data.cta.signoff.isAdded" -->
-                      <div
-                        class="mb-4"
-                        v-if="!data.addons.videoMeeting.isAdded"
-                      >
+                      <div class="mb-4" v-if="!data.addons.disclaimer">
                         <div
                           class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
-                          @click="addAddons('videoMeeting')"
+                          @click="addAddons('disclaimer')"
                         >
                           <div class="flex items-center">
                             <svg
@@ -1598,13 +1942,14 @@ const isObjEmpty = (obj) => {
                           </div>
                           <div
                             class="relative bg-primary-color text-white font-semibold py-1 px-2 rounded-3xl"
+                            v-if="checkFeatureQualification('disclaimer')"
                           >
                             PRO
                           </div>
                         </div>
                       </div>
                       <!-- Social -->
-                      <div class="mb-4" v-if="!data.addons.social.isAdded">
+                      <div class="mb-4" v-if="!data.addons.social">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
                           @click="addAddons('social')"
@@ -1624,13 +1969,10 @@ const isObjEmpty = (obj) => {
                         </div>
                       </div>
                       <!-- Green Message -->
-                      <div
-                        class="mb-4"
-                        v-if="!data.addons.videoMeeting.isAdded"
-                      >
+                      <div class="mb-4" v-if="!data.addons.greenMessage">
                         <div
                           class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
-                          @click="addAddons('videoMeeting')"
+                          @click="addAddons('greenMessage')"
                         >
                           <div class="flex items-center">
                             <svg
@@ -1648,16 +1990,14 @@ const isObjEmpty = (obj) => {
                           </div>
                           <div
                             class="relative bg-primary-color text-white font-semibold py-1 px-2 rounded-3xl"
+                            v-if="checkFeatureQualification('greenMessage')"
                           >
                             PRO
                           </div>
                         </div>
                       </div>
                       <!-- Video Meeting -->
-                      <div
-                        class="mb-4"
-                        v-if="!data.addons.videoMeeting.isAdded"
-                      >
+                      <div class="mb-4" v-if="!data.addons.videoMeeting">
                         <div
                           class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-lg border cursor-pointer"
                           @click="addAddons('videoMeeting')"
@@ -1684,7 +2024,8 @@ const isObjEmpty = (obj) => {
                           </div>
                         </div>
                       </div>
-                      <div class="mb-3" v-if="!data.addons.cta.isAdded">
+                      <!-- CTA -->
+                      <div class="mb-3" v-if="!data.addons.cta">
                         <div
                           class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl border cursor-pointer"
                           @click="addAddons('cta')"
@@ -1898,10 +2239,10 @@ const isObjEmpty = (obj) => {
             </div>
           </div>
         </aside>
-        <main class="w-full h-screen justify-between flex flex-col">
+        <main class="w-[calc(100%_-_450px)] h-screen flex flex-col">
           <div class="">
             <div
-              class="h-[45px] w-full bg-white shadow-lg border-b flex items-center px-6"
+              class="h-[50px] w-full bg-white shadow-lg border-b flex items-center justify-between px-6"
             >
               <nuxt-link to="/">
                 <div class="home flex items-center">
@@ -1915,10 +2256,10 @@ const isObjEmpty = (obj) => {
                       d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 278.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"
                     />
                   </svg>
-                  <span class="ml-2 text-lg">Home</span>
+                  <span class="ml-2 text-lg">Go Home</span>
                 </div>
               </nuxt-link>
-              <div class="controls ml-4 flex items-center">
+              <div class="controls flex items-center">
                 <div class="undo cursor-pointer" title="Undo" @click="undo">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1950,12 +2291,20 @@ const isObjEmpty = (obj) => {
                   </svg>
                 </div>
               </div>
+              <div class="">
+                <button
+                  class="py-2 px-4 bg-primary-color text-white font-medium rounded-lg"
+                >
+                  Save Signature
+                </button>
+              </div>
             </div>
           </div>
-          <div class="relative overflow-y-auto px-5">
+          <div class="relative h-[calc(100vh_-_50px)] overflow-y-auto px-5">
+            {{ checkFeatureQualification("social") }}
             <EditorPreview :data="data" />
           </div>
-          <div class="">
+          <!-- <div class="">
             <div
               class="h-[50px] w-full flex items-center justify-end px-6 bg-white shadow-2xl border-t"
             >
@@ -1972,10 +2321,11 @@ const isObjEmpty = (obj) => {
                 </svg>
               </div>
             </div>
-          </div>
+          </div> -->
         </main>
       </section>
     </div>
+    <!-- Image Modal -->
     <div
       class="image-modal fixed top-0 left-0 w-full h-full bg-[#ffffff83] backdrop-blur"
       v-if="imageModal"

@@ -51,7 +51,6 @@ export default () => {
         ],
         addons: {
           signoff: {
-            isAdded: true,
             value: "Sincerely,",
             style: {
               fontFamily: "Sans Serif",
@@ -60,7 +59,6 @@ export default () => {
             },
           },
           social: {
-            isAdded: true,
             items: [
               {
                 id: "725c18",
@@ -79,7 +77,6 @@ export default () => {
             },
           },
           videoMeeting: {
-            isAdded: true,
             items: {
               name: "google-meet",
               text: "Meet me on Google Meet",
@@ -88,38 +85,6 @@ export default () => {
             style: {
               height: 21,
               paddingTop: 10,
-            },
-          },
-          cta: {
-            isAdded: false,
-            item: {
-              text: "",
-              url: "",
-            },
-            style: {
-              paddingTop: 10,
-              textColor: "#ffffff",
-              buttonColor: "#1A0E71",
-            },
-          },
-          disclaimer: {
-            isAdded: false,
-            text: "",
-            style: {
-              width: 500,
-              fontSize: "small",
-              textColor: "#bac6d9",
-            },
-          },
-          greenMessage: {
-            isAdded: false,
-            items: {
-              text: "",
-              icon: "",
-            },
-            style: {
-              fontSize: "small",
-              textColor: "",
             },
           },
         },
@@ -188,7 +153,6 @@ export default () => {
         ],
         addons: {
           signoff: {
-            isAdded: true,
             value: "Best Regards,",
             style: {
               fontFamily: "Sans Serif",
@@ -197,7 +161,6 @@ export default () => {
             },
           },
           social: {
-            isAdded: true,
             items: [
               {
                 id: "725c18",
@@ -213,50 +176,6 @@ export default () => {
             style: {
               height: 40,
               paddingTop: 5,
-            },
-          },
-          videoMeeting: {
-            isAdded: false,
-            items: {
-              name: "google-meet",
-              text: "Meet me on Google Meet",
-              url: "",
-            },
-            style: {
-              height: 21,
-              paddingTop: 10,
-            },
-          },
-          cta: {
-            isAdded: false,
-            item: {
-              text: "",
-              url: "",
-            },
-            style: {
-              paddingTop: 10,
-              textColor: "#ffffff",
-              buttonColor: "#1A0E71",
-            },
-          },
-          disclaimer: {
-            isAdded: false,
-            text: "",
-            style: {
-              width: 500,
-              fontSize: "small",
-              textColor: "#bac6d9",
-            },
-          },
-          greenMessage: {
-            isAdded: false,
-            items: {
-              text: "",
-              icon: "",
-            },
-            style: {
-              fontSize: "small",
-              textColor: "",
             },
           },
         },
@@ -323,37 +242,7 @@ export default () => {
           { id: "68x69r", name: "quora", url: "https://quora.com/" },
         ],
         addons: {
-          signoff: {
-            isAdded: false,
-            value: "Best Regards,",
-            style: {
-              fontFamily: "Sans Serif",
-              templateColor: "#226ebf",
-              fontSize: 30,
-            },
-          },
-          social: {
-            isAdded: false,
-            items: [],
-            style: {
-              height: 40,
-              paddingTop: 5,
-            },
-          },
-          videoMeeting: {
-            isAdded: false,
-            items: {
-              name: "google-meet",
-              text: "Meet me on Google Meet",
-              url: "",
-            },
-            style: {
-              height: 21,
-              paddingTop: 10,
-            },
-          },
-          cta: {
-            isAdded: true,
+           cta: {
             item: {
               text: "Join My Blog Today",
               url: "https://google.com/",
@@ -362,26 +251,6 @@ export default () => {
               paddingTop: 10,
               textColor: "#ffffff",
               buttonColor: "#1A0E71",
-            },
-          },
-          disclaimer: {
-            isAdded: false,
-            text: "",
-            style: {
-              width: 500,
-              fontSize: "small",
-              textColor: "#bac6d9",
-            },
-          },
-          greenMessage: {
-            isAdded: false,
-            items: {
-              text: "",
-              icon: "",
-            },
-            style: {
-              fontSize: "small",
-              textColor: "",
             },
           },
         },
@@ -440,69 +309,7 @@ export default () => {
           },
           { id: "dnnb3c", name: "linkedin", url: "https://www.linkedin.com/" },
         ],
-        addons: {
-          signoff: {
-            isAdded: false,
-            value: "Best Regards,",
-            style: {
-              fontFamily: "Sans Serif",
-              templateColor: "#226ebf",
-              fontSize: 30,
-            },
-          },
-          social: {
-            isAdded: false,
-            items: [],
-            style: {
-              height: 40,
-              paddingTop: 5,
-            },
-          },
-          videoMeeting: {
-            isAdded: false,
-            items: {
-              name: "google-meet",
-              text: "Meet me on Google Meet",
-              url: "",
-            },
-            style: {
-              height: 21,
-              paddingTop: 10,
-            },
-          },
-          cta: {
-            isAdded: false,
-            item: {
-              text: "",
-              url: "",
-            },
-            style: {
-              paddingTop: 10,
-              textColor: "#ffffff",
-              buttonColor: "#1A0E71",
-            },
-          },
-          disclaimer: {
-            isAdded: false,
-            text: "",
-            style: {
-              width: 500,
-              fontSize: "small",
-              textColor: "#bac6d9",
-            },
-          },
-          greenMessage: {
-            isAdded: false,
-            items: {
-              text: "",
-              icon: "",
-            },
-            style: {
-              fontSize: "small",
-              textColor: "",
-            },
-          },
-        },
+        addons: {},
         design: {
           layout: {
             fontFamily: "Verdana",
@@ -523,8 +330,92 @@ export default () => {
       },
     },
   ];
+  const layouts = [
+    {
+      id: 1,
+      name: 'Layouts01',
+      img: '',
+      type: 'pro'
+    },
+    {
+      id: 2,
+      name: 'Layouts02',
+      img: '',
+      type: 'free'
+    },
+    {
+      id: 3,
+      name: 'Layouts03',
+      img: '',
+      type: 'pro'
+    },
+    {
+      id: 4,
+      name: 'Layouts04',
+      img: '',
+      type: 'pro'
+    },
+    {
+      id: 5,
+      name: 'Layout05',
+      img: '',
+      type: 'pro'
+    },
+  ]
 
   return {
     templates,
   };
 };
+
+
+          // signoff: {
+          //   isAdded: false,
+          //   value: "Best Regards,",
+          //   style: {
+          //     fontFamily: "Sans Serif",
+          //     templateColor: "#226ebf",
+          //     fontSize: 30,
+          //   },
+          // },
+          // social: {
+          //   isAdded: false,
+          //   items: [],
+          //   style: {
+          //     height: 40,
+          //     paddingTop: 5,
+          //   },
+          // },
+          // videoMeeting: {
+          //   isAdded: false,
+          //   items: {
+          //     name: "google-meet",
+          //     text: "Meet me on Google Meet",
+          //     url: "",
+          //   },
+          //   style: {
+          //     height: 21,
+          //     paddingTop: 10,
+          //   },
+          // },
+         
+          // disclaimer: {
+          //   isAdded: false,
+          //   text: "",
+          //   style: {
+          //     width: 500,
+          //     fontSize: "small",
+          //     textColor: "#bac6d9",
+          //   },
+          // },
+          // greenMessage: {
+          //   isAdded: false,
+          //   items: {
+          //     text: "",
+          //     icon: "",
+          //   },
+          //   style: {
+          //     fontSize: "small",
+          //     textColor: "",
+          //   },
+          // },
