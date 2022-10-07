@@ -158,7 +158,58 @@ const prop = defineProps(["data"]);
         </a>
       </td>
     </tr>
+    <tr>
+      <table
+        cellspacing="0"
+        cellpadding="0"
+        border-0
+        style="margin-top: 10px; width: 500px"
+      >
+        
+      </table>
+    </tr>
+    <tr v-if="data.addons.disclaimer">
+      <table cellspacing="0" cellpadding="0" border-0 style="margin-top: 10px">
+        <tr>
+          <td
+            style="margin: 0.1px; width: 100%; line-height: 1.3"
+            :style="{
+              'font-size': data.addons.disclaimer.style.fontSize,
+              color: data.addons.disclaimer.style.textColor,
+            }"
+          >
+            {{ data.addons.disclaimer.text }}
+          </td>
+        </tr>
+      </table>
+    </tr>
+    <tr v-if="data.addons.greenMessage">
+      <table cellspacing="0" cellpadding="0" border-0 style="margin-top: 10px">
+        <tr
+          :style="{
+            'font-size': data.addons.greenMessage.style.fontSize,
+            color: data.addons.greenMessage.style.textColor,
+          }"
+        >
+          <td
+            style="padding-right: 5px"
+            v-if="data.addons.greenMessage.items.icon"
+          >
+            <img
+              :src="
+                '/images/greenMessage/' + data.addons.greenMessage.items.icon
+              "
+              alt=""
+            />
+          </td>
+          <td>{{ data.addons.greenMessage.items.text }}</td>
+        </tr>
+      </table>
+      <td style="margin: 0.1px; width: 100%; line-height: 1.3">
+        <p>
+          <span style="height: 32px; width: 32px; display: inline-block"></span>
+        </p>
+      </td>
+    </tr>
   </table>
 </template>
-
-<!-- || '/images/placeholder-small.jpg' -->

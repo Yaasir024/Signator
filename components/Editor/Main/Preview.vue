@@ -15,9 +15,7 @@ const renderComponent = resolveComponent(resolveDynamicComp());
       </div>
       <div class="preview">
         <div class="sig-preview pt-7 px-9 mb-10">
-          {{ data.design.layout.layout }}
-          {{ prop.data.design.layout.layout }}
-
+          <!-- {{ data.design.layout.layout }} -->
           <Component :is="renderComponent" :data="data" />
         </div>
       </div>
