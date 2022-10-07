@@ -1,5 +1,5 @@
 <script setup>
-const { data } = useEditor();
+const data = inject('data')
 const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const {
   defaultAddonData,
@@ -26,7 +26,8 @@ const toggleDisclaimerMenu = () => {
 const setDisclaimer = (value) => {
   data.value.addons.disclaimer.type = value;
   data.value.addons.disclaimer.text = disclaimerData[value];
-  console.log(disclaimerData[value]);
+  // console.log(data.value.addons.disclaimer.text )
+  // console.log(disclaimerData[value]);
   disclaimerMenu.value = false;
 };
 // Type Menu On Click Outside
@@ -45,7 +46,6 @@ const toggleFontDisclaimerMenu = () => {
 //
 const setDisclaimerFont = (value) => {
   data.value.addons.disclaimer.style.fontSize = value;
-  console.log(value);
   disclaimerFontMenu.value = false;
 };
 //

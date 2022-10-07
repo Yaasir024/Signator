@@ -1,6 +1,5 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject('data')
 const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const {
   defaultAddonData,
@@ -25,7 +24,7 @@ const toggleGreenMessageMenu = () => {
 const setGreenMessage = (value) => {
   data.value.addons.greenMessage.items.type = value;
   data.value.addons.greenMessage.items.text = greenMessageData[value];
-  console.log(greenMessageData[value]);
+  // console.log(greenMessageData[value]);
   greenMessageMenu.value = false;
 };
 // Menu On Click Outside
@@ -42,7 +41,6 @@ const toggleFontGreenMessageMenu = () => {
 //
 const setGreenMessageFont = (value) => {
   data.value.addons.greenMessage.style.fontSize = value;
-  console.log(value);
   greenMessageFontMenu.value = false;
 };
 //

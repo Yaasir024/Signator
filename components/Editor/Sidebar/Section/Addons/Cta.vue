@@ -1,6 +1,5 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject('data')
 const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const {
   defaultAddonData,
@@ -10,7 +9,7 @@ const {
 } = useAddonsData();
 // Delete Addon
 const deleteAddons = () => {
-  delete data.value.addons.disclaimer;
+  delete data.value.addons.cta;
 };
 const showDetail = ref(true);
 const toggleDetail = () => {

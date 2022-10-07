@@ -1,4 +1,6 @@
 <script setup>
+  const route = useRoute();
+  const routeName = route.name;
 const showNav = ref(false);
 
 const toggleNav = () => {
@@ -33,7 +35,7 @@ useClickOutside(accountsMenu, () => {
   accountNav.value = false;
 });
 
-let user = ref(false);
+let user = ref(true);
 </script>
 
 <template>
@@ -79,7 +81,7 @@ let user = ref(false);
       </nuxt-link>
     </div>
     <div class="hidden md:flex items-center" v-if="user">
-      <nuxt-link to="/dashboard">
+      <nuxt-link to="/dashboard" v-if="routeName != 'dashboard' ">
         <button
           class="py-2 px-4 bg-primary-color text-white font-medium rounded-lg"
         >

@@ -1,5 +1,4 @@
 <script setup>
-const { defaultTransition } = useTailwindConfig();
 const { templates } = useTemplatesData();
 const { uid } = useGenerateUid();
 const router = useRouter();
@@ -38,11 +37,10 @@ const createEditorSession = (data) => {
 };
 
 //
-const user = ref("pro");
+const user = ref("free");
 </script>
 
 <template>
-  {{filteredTemplates}}
   <div class="min-h-screen bg-canvas-color">
     <Navbar />
     <main class="px-8 pb-20">

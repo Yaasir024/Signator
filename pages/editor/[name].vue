@@ -1,21 +1,6 @@
 <script setup>
-const { isDarkMode, routeName, data } = useEditor();
-const message = ref('Hi there')
+const { routeName, data } = useEditor();
 provide(/* key */ 'data', /* value */ data)
-// const data = useLocalStorage(`${routeName}`, {});
-// import {
-//   useRefHistory,
-//   useDebouncedRefHistory,
-//   useLocalStorage,
-//   useStorage,
-// } from "@vueuse/core";
-
-// const { history, undo, redo } = useDebouncedRefHistory(data, {
-//   deep: true,
-//   capacity: 15,
-//   debounce: 2000,
-// });
-
 // To check if an Obj is Empty
 const isObjEmpty = (obj) => {
   for (var o in obj) {

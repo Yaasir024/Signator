@@ -1,6 +1,5 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject("data");
 const {
   defaultAddonData,
   disclaimerData,
@@ -8,10 +7,9 @@ const {
   checkFeatureQualification,
 } = useAddonsData();
 const addAddons = (addon) => {
-  data.value.addons[addon] = defaultAddonData[addon];
-  //   if(checkFeatureQualification(addon)) {
-
-  //   }
+  if (checkFeatureQualification(addon)) {
+    data.value.addons[addon] = defaultAddonData[addon];
+  }
 };
 
 const checkAddedAddons = () => {
@@ -186,6 +184,7 @@ const checkAvailableAddons = () => {
           </div>
           <div
             class="relative bg-primary-color text-white font-semibold py-1 px-2 rounded-3xl"
+            v-if="!checkFeatureQualification('videoMeeting')"
           >
             PRO
           </div>
@@ -194,7 +193,7 @@ const checkAvailableAddons = () => {
       <!-- CTA -->
       <div class="mb-3" v-if="!data.addons.cta">
         <div
-          class="accordion flex items-center py-4 px-8 rounded-3xl shadow-xl border cursor-pointer"
+          class="accordion flex items-center justify-between py-4 px-8 rounded-3xl shadow-xl border cursor-pointer"
           @click="addAddons('cta')"
         >
           <div class="flex items-center">

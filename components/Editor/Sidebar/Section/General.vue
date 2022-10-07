@@ -1,5 +1,5 @@
 <script setup>
-const { routeName, previewImage, imageModal } = useEditor();
+const { previewImage, imageModal } = useEditor();
 const data = inject('data')
 const { uid } = useGenerateUid();
 const addNewContactItem = () => {
@@ -17,7 +17,6 @@ const deleteContactItem = (id) => {
 };
 const clearImage = () => {
   data.value.image.imgSrc = "";
-  console.log(defaultAddonData);
 };
 const readImage = (event) => {
   let input = event.target;
@@ -30,7 +29,6 @@ const readImage = (event) => {
     reader.readAsDataURL(input.files[0]);
   }
   imageModal.value = true;
-  console.log(image);
 };
 </script>
 
@@ -135,7 +133,7 @@ const readImage = (event) => {
       </div>
       <!-- Contact Info Section -->
       <div class="wrapper contact">
-        <EditorHeadings :title="'Layout'" />
+        <EditorHeadings :title="'Contact Info'" />
         <div class="my-3">
           <div
             class="field flex space-between mt-4 px-2 relative"
@@ -146,7 +144,7 @@ const readImage = (event) => {
               <input
                 type="text"
                 placeholder="Field"
-                class="text-sm w-full bg-canvas-color rounded-3xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-4transition-all ease-in-out duration-300"
+                class="text-sm w-full bg-canvas-color rounded-3xl border outline-none focus:border-primary-color focus:bg-white overflow-hidden py-2 px-3 px-4transition-all ease-in-out duration-300"
                 v-model="item.field"
               />
             </div>

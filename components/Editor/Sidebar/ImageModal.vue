@@ -1,5 +1,6 @@
 <script setup>
-const { routeName, data, previewImage, imageModal } = useEditor();
+const data = inject("data");
+const { previewImage, imageModal } = useEditor();
 const toggleImageModal = () => {
   imageModal.value = !imageModal.value;
 };
@@ -14,7 +15,6 @@ const readImage = (event) => {
     reader.readAsDataURL(input.files[0]);
   }
   imageModal.value = true;
-  console.log(image);
 };
 const setImage = () => {
   data.value.image.imgSrc = previewImage.value;

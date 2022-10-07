@@ -1,5 +1,5 @@
 <script setup>
-  const { routeName, data, previewImage, imageModal } = useEditor();
+  const { imageModal } = useEditor();
 </script>
 
 <template>

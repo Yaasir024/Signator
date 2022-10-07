@@ -87,7 +87,7 @@ export default () => {
   };
   const checkFeatureQualification = (feature) => {
     featuresQualification[feature].includes("free");
-    return featuresQualification[feature].includes("lite");
+    return featuresQualification[feature].includes("free");
   };
   const addonsData = {
     signoff: {

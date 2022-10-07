@@ -1,6 +1,6 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject('data')
+const { uid } = useGenerateUid();
 const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const {
   defaultAddonData,
@@ -78,7 +78,7 @@ const deleteSocialAddon = (id) => {
     </div>
     <div
       class="overflow-hidden transition-all ease-in-out duration-300"
-      :class="showSocial ? 'max-h-0' : 'max-h-[500px]'"
+      :class="showSocial ? 'max-h-0' : 'max-h-[999px]'"
     >
       <div class="content py-7 px-5">
         <div class="">

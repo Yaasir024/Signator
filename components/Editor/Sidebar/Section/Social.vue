@@ -1,6 +1,5 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject('data')
 const { socialIcons, addonsSocial, getUrl } = useEditorIcons();
 const { uid } = useGenerateUid();
 /*  SOCIAL SECTION */

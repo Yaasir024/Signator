@@ -1,6 +1,5 @@
 <script setup>
-const { routeName } = useEditor();
-const data = useLocalStorage(`${routeName}`, {});
+const data = inject('data')
 /* DESIGN SECTION */
 // Font Menu
 const fontMenu = ref(false);
