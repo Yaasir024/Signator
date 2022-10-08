@@ -2,15 +2,20 @@
 export default defineNuxtConfig({
   // plugins: [{ src: "~plugins/vuedraggable.js", ssr: false }],
   components: {
-    "dirs": [
+    dirs: [
       {
-        "path": "~/components/global",
-        "global": true
+        path: "~/components/global",
+        global: true,
       },
-      "~/components"
-    ]
+      "~/components",
+    ],
   },
-  modules: ["@nuxtjs/tailwindcss", "@vueuse/nuxt"],
+  modules: [
+    // Tailwind CSS
+    "@nuxtjs/tailwindcss",
+    // VueUse
+    "@vueuse/nuxt",
+  ],
   meta: {
     link: [
       {
